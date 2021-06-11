@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -39,6 +41,7 @@ public class AccountRepositoryTest {
     }
 
     @Test
+    @Transactional
     public void addUserAndCompany(){
         AccountDTO accountUser = new AccountDTO();
         accountUser.setAccountId("testUser");

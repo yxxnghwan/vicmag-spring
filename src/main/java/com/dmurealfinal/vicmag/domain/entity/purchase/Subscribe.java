@@ -30,14 +30,14 @@ public class Subscribe {
     @Column(columnDefinition = "double")
     private Double rating;
 
+    @Column
     private Long magazineBoardSeq;
 
     public Subscribe() {}
 
     @Builder
-    public Subscribe(Long purchaseSeq, Purchase purchase, LocalDateTime startDateTime, LocalDateTime endDateTime, Double rating, Long magazineBoardSeq) {
+    public Subscribe(Long purchaseSeq, LocalDateTime startDateTime, LocalDateTime endDateTime, Double rating, Long magazineBoardSeq) {
         this.purchaseSeq = purchaseSeq;
-        this.purchase = purchase;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.rating = rating;

@@ -3,9 +3,12 @@ package com.dmurealfinal.vicmag.domain.dto;
 import com.dmurealfinal.vicmag.domain.entity.account.Company;
 import com.dmurealfinal.vicmag.domain.entity.account.User;
 import com.dmurealfinal.vicmag.domain.entity.purchase.Payment;
+import com.dmurealfinal.vicmag.domain.entity.purchase.Purchase;
 import com.dmurealfinal.vicmag.domain.entity.purchase.SinglePurchase;
 import com.dmurealfinal.vicmag.domain.entity.purchase.Subscribe;
 import lombok.Data;
+
+import javax.persistence.Column;
 
 @Data
 public class PurchaseDTO {
@@ -13,13 +16,27 @@ public class PurchaseDTO {
 
     private String purchaseType;
 
-    private User userId;
+    private String userId;
 
-    private Company companyId;
+    private String companyId;
 
-    private SinglePurchase singlePurchase;
 
-    private Subscribe subscribe;
+    // for response
+    private UserDTO user;
 
-    private Payment payment;
+    private CompanyDTO company;
+
+    private SinglePurchaseDTO singlePurchase;
+
+    private SubscribeDTO subscribe;
+
+    private PaymentDTO payment;
+
+    public Purchase toEntity() {
+        return Purchase.builder()
+                .purchaseType(this.purchaseType)
+                .userId(this.userId)
+                .companyId(this.companyId)
+                .build();
+    }
 }

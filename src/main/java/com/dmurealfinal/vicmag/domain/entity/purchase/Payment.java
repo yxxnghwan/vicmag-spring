@@ -34,9 +34,8 @@ public class Payment {
     public Payment() {}
 
     @Builder
-    public Payment(Long purchaseSeq, Purchase purchase, Integer totalPrice, String description, String paymentType, LocalDateTime payDateTime) {
+    public Payment(Long purchaseSeq, Integer totalPrice, String description, String paymentType, LocalDateTime payDateTime) {
         this.purchaseSeq = purchaseSeq;
-        this.purchase = purchase;
         this.totalPrice = totalPrice;
         this.description = description;
         this.paymentType = paymentType;

@@ -21,10 +21,10 @@ public class Account extends BaseTimeEntity {
     @Column(columnDefinition = "nvarchar(10)")
     private String accountType;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "account", cascade = CascadeType.REMOVE)
     private Company company;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "account", cascade = CascadeType.REMOVE)
     private User user;
 
     public Account() {}

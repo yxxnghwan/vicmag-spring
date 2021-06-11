@@ -1,17 +1,21 @@
 package com.dmurealfinal.vicmag.domain.dto;
 
-import com.dmurealfinal.vicmag.domain.entity.account.User;
-import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
+import com.dmurealfinal.vicmag.domain.entity.magazineview.MagazineView;
 import lombok.Data;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Data
 public class MagazineViewDTO {
     private Long magazineViewSeq;
 
-    private User user;
+    private String userId;
 
-    private Magazine magazine;
+    private Long magazineSeq;
+
+    public MagazineView toEntity() {
+        return MagazineView.builder()
+                .userId(userId)
+                .magazineSeq(magazineSeq)
+                .build();
+    }
 }

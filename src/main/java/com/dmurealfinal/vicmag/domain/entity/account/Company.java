@@ -32,9 +32,8 @@ public class Company {
     public Company() {}
 
     @Builder
-    public Company(String accountId, Account account, String companyRegistrationNumber, String name, String phone, String email) {
+    public Company(String accountId, String companyRegistrationNumber, String name, String phone, String email) {
         this.accountId = accountId;
-        this.account = account;
         this.companyRegistrationNumber = companyRegistrationNumber;
         this.name = name;
         this.phone = phone;

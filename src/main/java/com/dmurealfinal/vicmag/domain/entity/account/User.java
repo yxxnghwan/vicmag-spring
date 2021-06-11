@@ -29,9 +29,8 @@ public class User {
     public User() {}
 
     @Builder
-    public User(String accountId, Account account, String name, String phone, String email) {
+    public User(String accountId, String name, String phone, String email) {
         this.accountId = accountId;
-        this.account = account;
         this.name = name;
         this.phone = phone;
         this.email = email;

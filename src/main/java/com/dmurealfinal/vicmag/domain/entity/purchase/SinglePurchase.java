@@ -25,9 +25,8 @@ public class SinglePurchase {
     public SinglePurchase() {}
 
     @Builder
-    public SinglePurchase(Long purchaseSeq, Purchase purchase, Double rating, Long magazineSeq) {
+    public SinglePurchase(Long purchaseSeq, Double rating, Long magazineSeq) {
         this.purchaseSeq = purchaseSeq;
-        this.purchase = purchase;
         this.rating = rating;
         this.magazineSeq = magazineSeq;
     }

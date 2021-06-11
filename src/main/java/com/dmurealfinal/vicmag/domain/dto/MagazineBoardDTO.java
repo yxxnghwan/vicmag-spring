@@ -1,6 +1,7 @@
 package com.dmurealfinal.vicmag.domain.dto;
 
 import com.dmurealfinal.vicmag.domain.entity.account.Company;
+import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import lombok.Data;
 
 @Data
@@ -17,5 +18,17 @@ public class MagazineBoardDTO {
 
     private String category;
 
-    private Company company;
+    // for response
+    private CompanyDTO company;
+
+    public MagazineBoard toEntity() {
+        return MagazineBoard.builder()
+                .name(this.name)
+                .boardImgUrl(this.boardImgUrl)
+                .description(this.description)
+                .pricePerMonth(this.pricePerMonth)
+                .category(this.category)
+                .company(this.company.toEntity())
+                .build();
+    }
 }

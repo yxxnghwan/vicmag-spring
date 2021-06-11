@@ -25,13 +25,13 @@ public class Purchase extends BaseTimeEntity {
     @Column(columnDefinition = "nvarchar(30)")
     private String companyId;
 
-    @OneToOne(mappedBy = "purchase", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "purchase", cascade = CascadeType.REMOVE)
     private SinglePurchase singlePurchase;
 
-    @OneToOne(mappedBy = "purchase", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "purchase", cascade = CascadeType.REMOVE)
     private Subscribe subscribe;
 
-    @OneToOne(mappedBy = "purchase", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "purchase", cascade = CascadeType.REMOVE)
     private Payment payment;
 
     public Purchase() {}
