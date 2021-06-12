@@ -1,10 +1,13 @@
 package com.dmurealfinal.vicmag.domain.entity.account;
 
+import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.CompanyDTO;
 import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table(name = "TB_COMPANY")
@@ -49,5 +52,13 @@ public class Company {
                 .phone(this.phone)
                 .email(this.email)
                 .build();
+    }
+
+    public static List<CompanyDTO> toDTOList (List<Company> entityList) {
+        List<CompanyDTO> result = new ArrayList<>();
+        for(Company entity : entityList) {
+            result.add(entity.toDTO());
+        }
+        return result;
     }
 }

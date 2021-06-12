@@ -27,15 +27,36 @@ public class MagazineController {
     @Autowired
     MagazineService magazineService;
 
-    @GetMapping
-    public List<Magazine> getMagazines() {
-        logger.info("잡지 리스트 요청");
-        List<Magazine> result = new ArrayList<Magazine>();
-        Magazine testMagazine = new Magazine();
-        result.add(testMagazine);
-
-        return result;
+    /** 잡지 보드 리스트(메인) */
+    @GetMapping("/boards")
+    public List<MagazineBoardDTO> getMagazineBoardList(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("잡지 보드 리스트 요청");
+        return magazineService.findMagazineBoardList();
     }
+
+    /** 잡지 보드 상세 조회 */
+    @GetMapping("/boards/{boardSeq}")
+    public MagazineBoardDTO getMagazineBoard(HttpServletRequest request, HttpServletResponse response, @PathVariable Long boardSeq) {
+        logger.info("잡지 보드 상세조회");
+        return magazineService.findMagazineBoard(boardSeq);
+    }
+
+    /** 잡지 상세 조회 */
+    @GetMapping("/magazines/{magazineSeq}")
+    public MagazineDTO getMagazine(HttpServletRequest request, HttpServletResponse response, @PathVariable Long magazineSeq) {
+        logger.info("잡지 상세 조회");
+        return magazineService.findMagazine(magazineSeq);
+    }
+
+    /** 컨텐츠 상세 조회 */
+    @GetMapping("/contents/{contentsSeq}")
+    public MagazineContentsDTO getMagazineContents(HttpServletRequest request, HttpServletResponse response, @PathVariable Long contentsSeq) {
+        logger.info("컨텐츠 상세 조회");
+        return magazineService.findMagazineContents(contentsSeq);
+    }
+
+
+
 
     /** 잡지 보드 등록 API */
     @PostMapping("/boards")

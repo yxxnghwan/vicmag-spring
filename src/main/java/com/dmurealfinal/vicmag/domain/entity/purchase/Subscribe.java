@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
+import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
 import com.dmurealfinal.vicmag.domain.dto.SubscribeDTO;
 import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import lombok.Builder;
@@ -8,6 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table(name = "TB_SUBSCRIBE")
@@ -53,5 +56,13 @@ public class Subscribe {
                 .rating(this.rating)
                 .magazineBoardSeq(this.magazineBoardSeq)
                 .build();
+    }
+
+    public static List<SubscribeDTO> toDTOList (List<Subscribe> entityList) {
+        List<SubscribeDTO> result = new ArrayList<>();
+        for(Subscribe entity : entityList) {
+            result.add(entity.toDTO());
+        }
+        return result;
     }
 }

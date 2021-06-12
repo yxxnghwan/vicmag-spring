@@ -1,11 +1,14 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
+import com.dmurealfinal.vicmag.domain.dto.PurchaseDTO;
 import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table(name = "TB_SINGLE_PURCHASE")
@@ -38,5 +41,13 @@ public class SinglePurchase {
                 .rating(this.rating)
                 .magazineSeq(this.magazineSeq)
                 .build();
+    }
+
+    public static List<SinglePurchaseDTO> toDTOList (List<SinglePurchase> entityList) {
+        List<SinglePurchaseDTO> result = new ArrayList<>();
+        for(SinglePurchase entity : entityList) {
+            result.add(entity.toDTO());
+        }
+        return result;
     }
 }

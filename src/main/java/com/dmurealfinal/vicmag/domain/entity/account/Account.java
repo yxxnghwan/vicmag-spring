@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table(name = "TB_ACCOUNT")
@@ -43,5 +45,13 @@ public class Account extends BaseTimeEntity {
                 .password(this.password)
                 .accountType(this.accountType)
                 .build();
+    }
+
+    public static List<AccountDTO> toDTOList (List<Account> entityList) {
+        List<AccountDTO> result = new ArrayList<>();
+        for(Account entity : entityList) {
+            result.add(entity.toDTO());
+        }
+        return result;
     }
 }

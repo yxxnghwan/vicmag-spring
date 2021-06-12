@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class MagazineService {
@@ -49,6 +50,38 @@ public class MagazineService {
     public void saveMagazineContents(MagazineContentsDTO magazineContentsDTO) {
         MagazineContents magazineContents = magazineContentsDTO.toEntity();
         magazineContentsRepository.save(magazineContents);
+    }
+
+    @Transactional
+    public List<MagazineBoardDTO> findMagazineBoardList() {
+        List<MagazineBoard> magazineBoardList = magazineBoardRepository.findAll();
+        return MagazineBoard.toDTOList(magazineBoardList);
+    }
+
+    @Transactional
+    public MagazineBoardDTO findMagazineBoard(Long boardSeq) {
+        MagazineBoard magazineBoard = magazineBoardRepository.getById(boardSeq);
+        MagazineBoardDTO result = magazineBoard.toDTO();
+        result.setCompany(magazineBoard.getCompany().toDTO());
+        result.setMagazineList(Magazine.toDTOList(magazineRepository.findByBoardSeq(boardSeq)));
+        return result;
+    }
+
+    @Transactional
+    public MagazineDTO findMagazine(Long magazineSeq) {
+        Magazine magazine = magazineRepository.getById(magazineSeq);
+        MagazineDTO result = magazine.toDTO();
+        result.setBoard(magazine.getBoard().toDTO());
+        result.setMagazineContentsList(MagazineContents.toDTOList(magazineContentsRepository.findByMagazineSeq(magazineSeq)));
+        return result;
+    }
+
+    @Transactional
+    public MagazineContentsDTO findMagazineContents(Long contentsSeq) {
+        MagazineContents magazineContents = magazineContentsRepository.getById(contentsSeq);
+        MagazineContentsDTO result = magazineContents.toDTO();
+        result.setMagazine(magazineContents.getMagazine().toDTO());
+        return result;
     }
 
 }

@@ -5,6 +5,8 @@ import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class MagazineDTO {
     private Long magazineSeq;
@@ -21,6 +23,8 @@ public class MagazineDTO {
 
     // for response
     private MagazineBoardDTO board;
+
+    private List<MagazineContentsDTO> magazineContentsList;
 
     public MagazineDTO() {}
 

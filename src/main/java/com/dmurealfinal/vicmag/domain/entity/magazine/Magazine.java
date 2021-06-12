@@ -2,11 +2,15 @@ package com.dmurealfinal.vicmag.domain.entity.magazine;
 
 import com.dmurealfinal.vicmag.domain.BaseTimeEntity;
 import com.dmurealfinal.vicmag.domain.dto.MagazineDTO;
+import com.dmurealfinal.vicmag.domain.dto.UserDTO;
+import com.dmurealfinal.vicmag.domain.entity.account.User;
 import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table(name = "TB_MAGAZINE")
@@ -50,11 +54,20 @@ public class Magazine extends BaseTimeEntity {
 
     public MagazineDTO toDTO() {
         return MagazineDTO.builder()
+                .magazineSeq(this.magazineSeq)
                 .name(this.name)
                 .coverImgUrl(this.coverImgUrl)
                 .price(this.price)
                 .tag(this.tag)
                 .bgmUrl(this.bgmUrl)
                 .build();
+    }
+
+    public static List<MagazineDTO> toDTOList (List<Magazine> entityList) {
+        List<MagazineDTO> result = new ArrayList<>();
+        for(Magazine entity : entityList) {
+            result.add(entity.toDTO());
+        }
+        return result;
     }
 }

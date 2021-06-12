@@ -1,6 +1,7 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
 import com.dmurealfinal.vicmag.domain.BaseTimeEntity;
+import com.dmurealfinal.vicmag.domain.dto.PaymentDTO;
 import com.dmurealfinal.vicmag.domain.dto.PurchaseDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.Company;
 import com.dmurealfinal.vicmag.domain.entity.account.User;
@@ -8,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table(name = "TB_PURCHASE")
@@ -54,5 +57,13 @@ public class Purchase extends BaseTimeEntity {
                 .userId(this.userId)
                 .companyId(this.companyId)
                 .build();
+    }
+
+    public static List<PurchaseDTO> toDTOList (List<Purchase> entityList) {
+        List<PurchaseDTO> result = new ArrayList<>();
+        for(Purchase entity : entityList) {
+            result.add(entity.toDTO());
+        }
+        return result;
     }
 }

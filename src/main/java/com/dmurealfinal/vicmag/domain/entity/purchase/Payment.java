@@ -1,12 +1,16 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
+import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.PaymentDTO;
+import com.dmurealfinal.vicmag.domain.entity.account.Account;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table(name = "TB_PAYMENT")
@@ -51,6 +55,14 @@ public class Payment {
                 .paymentType(this.paymentType)
                 .payDateTime(this.payDateTime)
                 .build();
+    }
+
+    public static List<PaymentDTO> toDTOList (List<Payment> entityList) {
+        List<PaymentDTO> result = new ArrayList<>();
+        for(Payment entity : entityList) {
+            result.add(entity.toDTO());
+        }
+        return result;
     }
 
 
