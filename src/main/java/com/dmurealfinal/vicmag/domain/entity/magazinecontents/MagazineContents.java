@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.magazinecontents;
 
+import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,18 +27,28 @@ public class MagazineContents {
     @Column(columnDefinition = "nvarchar(300)")
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "magazineSeq")
     private Magazine magazine;
 
     public MagazineContents() {}
 
     @Builder
-    public MagazineContents(Integer page, String contentsType, String contentsUrl, String description, Magazine magazine) {
+    public MagazineContents(Long magazineContentsSeq, Integer page, String contentsType, String contentsUrl, String description, Magazine magazine) {
+        this.magazineContentsSeq = magazineContentsSeq;
         this.page = page;
         this.contentsType = contentsType;
         this.contentsUrl = contentsUrl;
         this.description = description;
         this.magazine = magazine;
+    }
+
+    public MagazineContentsDTO toDTO() {
+        return MagazineContentsDTO.builder()
+                .page(this.page)
+                .contentsType(this.contentsType)
+                .contentsUrl(this.contentsUrl)
+                .description(this.description)
+                .build();
     }
 }

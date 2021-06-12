@@ -1,6 +1,7 @@
 package com.dmurealfinal.vicmag.domain.entity.account;
 
 import com.dmurealfinal.vicmag.domain.BaseTimeEntity;
+import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -34,5 +35,13 @@ public class Account extends BaseTimeEntity {
         this.accountId = accountId;
         this.password = password;
         this.accountType = accountType;
+    }
+
+    public AccountDTO toDTO() {
+        return AccountDTO.builder()
+                .accountId(this.accountId)
+                .password(this.password)
+                .accountType(this.accountType)
+                .build();
     }
 }

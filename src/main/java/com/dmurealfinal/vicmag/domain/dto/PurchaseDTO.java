@@ -6,6 +6,7 @@ import com.dmurealfinal.vicmag.domain.entity.purchase.Payment;
 import com.dmurealfinal.vicmag.domain.entity.purchase.Purchase;
 import com.dmurealfinal.vicmag.domain.entity.purchase.SinglePurchase;
 import com.dmurealfinal.vicmag.domain.entity.purchase.Subscribe;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -31,6 +32,21 @@ public class PurchaseDTO {
     private SubscribeDTO subscribe;
 
     private PaymentDTO payment;
+
+    public PurchaseDTO() {}
+
+    @Builder
+    public PurchaseDTO(Long purchaseSeq, String purchaseType, String userId, String companyId, UserDTO user, CompanyDTO company, SinglePurchaseDTO singlePurchase, SubscribeDTO subscribe, PaymentDTO payment) {
+        this.purchaseSeq = purchaseSeq;
+        this.purchaseType = purchaseType;
+        this.userId = userId;
+        this.companyId = companyId;
+        this.user = user;
+        this.company = company;
+        this.singlePurchase = singlePurchase;
+        this.subscribe = subscribe;
+        this.payment = payment;
+    }
 
     public Purchase toEntity() {
         return Purchase.builder()

@@ -1,6 +1,7 @@
 package com.dmurealfinal.vicmag.domain.entity.magazine;
 
 import com.dmurealfinal.vicmag.domain.BaseTimeEntity;
+import com.dmurealfinal.vicmag.domain.dto.MagazineDTO;
 import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,19 +31,30 @@ public class Magazine extends BaseTimeEntity {
     @Column(columnDefinition = "nvarchar(300)")
     private String bgmUrl;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "boardSeq")
     private MagazineBoard board;
 
     public Magazine() {}
 
     @Builder
-    public Magazine(String name, String coverImgUrl, Integer price, String tag, String bgmUrl, MagazineBoard board) {
+    public Magazine(Long magazineSeq, String name, String coverImgUrl, Integer price, String tag, String bgmUrl, MagazineBoard board) {
+        this.magazineSeq = magazineSeq;
         this.name = name;
         this.coverImgUrl = coverImgUrl;
         this.price = price;
         this.tag = tag;
         this.bgmUrl = bgmUrl;
         this.board = board;
+    }
+
+    public MagazineDTO toDTO() {
+        return MagazineDTO.builder()
+                .name(this.name)
+                .coverImgUrl(this.coverImgUrl)
+                .price(this.price)
+                .tag(this.tag)
+                .bgmUrl(this.bgmUrl)
+                .build();
     }
 }

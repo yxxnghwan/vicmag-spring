@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.account;
 
+import com.dmurealfinal.vicmag.domain.dto.CompanyDTO;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,7 +14,7 @@ public class Company {
     @Column(columnDefinition = "nvarchar(30)")
     private String accountId;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @PrimaryKeyJoinColumn
     private Account account;
 
@@ -38,5 +39,15 @@ public class Company {
         this.name = name;
         this.phone = phone;
         this.email = email;
+    }
+
+    public CompanyDTO toDTO() {
+        return CompanyDTO.builder()
+                .accountId(this.accountId)
+                .companyRegistrationNumber(this.companyRegistrationNumber)
+                .name(this.name)
+                .phone(this.phone)
+                .email(this.email)
+                .build();
     }
 }

@@ -2,6 +2,7 @@ package com.dmurealfinal.vicmag.domain.dto;
 
 import com.dmurealfinal.vicmag.domain.entity.purchase.Payment;
 import com.dmurealfinal.vicmag.domain.entity.purchase.Purchase;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -22,6 +23,18 @@ public class PaymentDTO {
 
     // for response
     private PurchaseDTO purchase;
+
+    public PaymentDTO() {}
+
+    @Builder
+    public PaymentDTO(Long purchaseSeq, Integer totalPrice, String description, String paymentType, LocalDateTime payDateTime, PurchaseDTO purchase) {
+        this.purchaseSeq = purchaseSeq;
+        this.totalPrice = totalPrice;
+        this.description = description;
+        this.paymentType = paymentType;
+        this.payDateTime = payDateTime;
+        this.purchase = purchase;
+    }
 
     public Payment toEntity() {
         return Payment.builder()

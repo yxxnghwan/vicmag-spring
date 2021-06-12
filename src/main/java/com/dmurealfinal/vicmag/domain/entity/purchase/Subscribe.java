@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
+import com.dmurealfinal.vicmag.domain.dto.SubscribeDTO;
 import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,7 @@ public class Subscribe {
     @Id
     private Long purchaseSeq;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @PrimaryKeyJoinColumn
     private Purchase purchase;
 
@@ -42,5 +43,15 @@ public class Subscribe {
         this.endDateTime = endDateTime;
         this.rating = rating;
         this.magazineBoardSeq = magazineBoardSeq;
+    }
+
+    public SubscribeDTO toDTO() {
+        return SubscribeDTO.builder()
+                .purchaseSeq(this.purchaseSeq)
+                .startDateTime(this.startDateTime)
+                .endDateTime(this.endDateTime)
+                .rating(this.rating)
+                .magazineBoardSeq(this.magazineBoardSeq)
+                .build();
     }
 }

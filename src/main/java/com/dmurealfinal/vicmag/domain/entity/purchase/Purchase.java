@@ -1,6 +1,7 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
 import com.dmurealfinal.vicmag.domain.BaseTimeEntity;
+import com.dmurealfinal.vicmag.domain.dto.PurchaseDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.Company;
 import com.dmurealfinal.vicmag.domain.entity.account.User;
 import lombok.Builder;
@@ -37,12 +38,21 @@ public class Purchase extends BaseTimeEntity {
     public Purchase() {}
 
     @Builder
-    public Purchase(String purchaseType, String userId, String companyId, SinglePurchase singlePurchase, Subscribe subscribe, Payment payment) {
+    public Purchase(Long purchaseSeq, String purchaseType, String userId, String companyId, SinglePurchase singlePurchase, Subscribe subscribe, Payment payment) {
+        this.purchaseSeq = purchaseSeq;
         this.purchaseType = purchaseType;
         this.userId = userId;
         this.companyId = companyId;
         this.singlePurchase = singlePurchase;
         this.subscribe = subscribe;
         this.payment = payment;
+    }
+
+    public PurchaseDTO toDTO() {
+        return PurchaseDTO.builder()
+                .purchaseType(this.purchaseType)
+                .userId(this.userId)
+                .companyId(this.companyId)
+                .build();
     }
 }

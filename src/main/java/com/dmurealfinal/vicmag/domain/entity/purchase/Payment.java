@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
+import com.dmurealfinal.vicmag.domain.dto.PaymentDTO;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +15,7 @@ public class Payment {
     @Id
     private Long purchaseSeq;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "purchaseSeq")
     private Purchase purchase;
 
@@ -40,6 +41,16 @@ public class Payment {
         this.description = description;
         this.paymentType = paymentType;
         this.payDateTime = payDateTime;
+    }
+
+    public PaymentDTO toDTO() {
+        return PaymentDTO.builder()
+                .purchaseSeq(this.purchaseSeq)
+                .totalPrice(this.totalPrice)
+                .description(this.description)
+                .paymentType(this.paymentType)
+                .payDateTime(this.payDateTime)
+                .build();
     }
 
 

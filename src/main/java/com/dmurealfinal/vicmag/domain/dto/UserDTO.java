@@ -2,6 +2,7 @@ package com.dmurealfinal.vicmag.domain.dto;
 
 import com.dmurealfinal.vicmag.domain.entity.account.Account;
 import com.dmurealfinal.vicmag.domain.entity.account.User;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -15,6 +16,17 @@ public class UserDTO {
     private String phone;
 
     private String email;
+
+    public UserDTO() {}
+
+    @Builder
+    public UserDTO(String accountId, AccountDTO account, String name, String phone, String email) {
+        this.accountId = accountId;
+        this.account = account;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
 
     public User toEntity() {
         return User.builder()

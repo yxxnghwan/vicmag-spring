@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.magazineboard;
 
+import com.dmurealfinal.vicmag.domain.dto.MagazineBoardDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.Company;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,19 +31,30 @@ public class MagazineBoard {
     @Column(columnDefinition = "nvarchar(20)")
     private String category;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "companyId")
     private Company company;
 
     public MagazineBoard() {}
 
     @Builder
-    public MagazineBoard(String name, String boardImgUrl, String description, Integer pricePerMonth, String category, Company company) {
+    public MagazineBoard(Long magazineBoardSeq, String name, String boardImgUrl, String description, Integer pricePerMonth, String category, Company company) {
+        this.magazineBoardSeq = magazineBoardSeq;
         this.name = name;
         this.boardImgUrl = boardImgUrl;
         this.description = description;
         this.pricePerMonth = pricePerMonth;
         this.category = category;
         this.company = company;
+    }
+
+    public MagazineBoardDTO toDTO() {
+        return MagazineBoardDTO.builder()
+                .name(this.name)
+                .boardImgUrl(this.boardImgUrl)
+                .description(this.description)
+                .pricePerMonth(this.pricePerMonth)
+                .category(this.category)
+                .build();
     }
 }

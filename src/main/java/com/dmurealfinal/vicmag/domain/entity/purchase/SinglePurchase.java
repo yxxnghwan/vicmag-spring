@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
+import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ public class SinglePurchase {
     @Id
     private Long purchaseSeq;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @PrimaryKeyJoinColumn
     private Purchase purchase;
 
@@ -29,5 +30,13 @@ public class SinglePurchase {
         this.purchaseSeq = purchaseSeq;
         this.rating = rating;
         this.magazineSeq = magazineSeq;
+    }
+
+    public SinglePurchaseDTO toDTO() {
+        return SinglePurchaseDTO.builder()
+                .purchaseSeq(this.purchaseSeq)
+                .rating(this.rating)
+                .magazineSeq(this.magazineSeq)
+                .build();
     }
 }

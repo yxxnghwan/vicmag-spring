@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.magazineview;
 
+import com.dmurealfinal.vicmag.domain.dto.MagazineViewDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.User;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import lombok.Builder;
@@ -24,8 +25,16 @@ public class MagazineView {
     public MagazineView() {}
 
     @Builder
-    public MagazineView(String userId, Long magazineSeq) {
+    public MagazineView(Long magazineViewSeq, String userId, Long magazineSeq) {
+        this.magazineViewSeq = magazineViewSeq;
         this.userId = userId;
         this.magazineSeq = magazineSeq;
+    }
+
+    public MagazineViewDTO toDTO() {
+        return MagazineViewDTO.builder()
+                .userId(userId)
+                .magazineSeq(magazineSeq)
+                .build();
     }
 }
