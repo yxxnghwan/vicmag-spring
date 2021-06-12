@@ -38,7 +38,7 @@ public class MagazineContentsDTO {
                 .contentsType(this.contentsType)
                 .contentsUrl(this.contentsUrl)
                 .description(this.description)
-                .magazine(this.magazine.toEntity())
+                .magazine((this.magazine == null ? null : this.magazine.toEntity()))
                 .build();
     }
 }

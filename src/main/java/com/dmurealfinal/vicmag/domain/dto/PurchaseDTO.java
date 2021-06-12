@@ -50,6 +50,7 @@ public class PurchaseDTO {
 
     public Purchase toEntity() {
         return Purchase.builder()
+                .purchaseSeq(this.purchaseSeq)
                 .purchaseType(this.purchaseType)
                 .userId(this.userId)
                 .companyId(this.companyId)

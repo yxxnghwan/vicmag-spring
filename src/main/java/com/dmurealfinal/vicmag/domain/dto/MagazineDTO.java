@@ -37,12 +37,13 @@ public class MagazineDTO {
 
     public Magazine toEntity() {
         return Magazine.builder()
+                .magazineSeq(this.magazineSeq)
                 .name(this.name)
                 .coverImgUrl(this.coverImgUrl)
                 .price(this.price)
                 .tag(this.tag)
                 .bgmUrl(this.bgmUrl)
-                .board(this.board.toEntity())
+                .board((this.board == null ? null : this.board.toEntity()))
                 .build();
     }
 }

@@ -1,6 +1,7 @@
 package com.dmurealfinal.vicmag.controller;
 
 import com.dmurealfinal.vicmag.domain.dto.MagazineBoardDTO;
+import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
 import com.dmurealfinal.vicmag.domain.dto.MagazineDTO;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import com.dmurealfinal.vicmag.service.MagazineService;
@@ -54,5 +55,13 @@ public class MagazineController {
         magazineService.saveMagazine(magazineDTO);
     }
 
-    /**  */
+    /** 잡지 컨텐츠 등록 API */
+    @PostMapping("/contents")
+    public void postMagazineContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException{
+        logger.info("잡지 컨텐츠 등록 요청");
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("MagazineContents : " + objectMapper.writeValueAsString(magazineContentsDTO));
+
+        magazineService.saveMagazineContents(magazineContentsDTO);
+    }
 }

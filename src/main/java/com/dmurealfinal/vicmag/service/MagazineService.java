@@ -1,12 +1,14 @@
 package com.dmurealfinal.vicmag.service;
 
 import com.dmurealfinal.vicmag.domain.dto.MagazineBoardDTO;
+import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
 import com.dmurealfinal.vicmag.domain.dto.MagazineDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.CompanyRepository;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import com.dmurealfinal.vicmag.domain.entity.magazine.MagazineRepository;
 import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoardRepository;
+import com.dmurealfinal.vicmag.domain.entity.magazinecontents.MagazineContents;
 import com.dmurealfinal.vicmag.domain.entity.magazinecontents.MagazineContentsRepository;
 import com.dmurealfinal.vicmag.domain.entity.magazineview.MagazineViewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,12 @@ public class MagazineService {
     public void saveMagazine(MagazineDTO magazineDTO) {
         Magazine magazine = magazineDTO.toEntity();
         magazineRepository.save(magazine);
+    }
+
+    @Transactional
+    public void saveMagazineContents(MagazineContentsDTO magazineContentsDTO) {
+        MagazineContents magazineContents = magazineContentsDTO.toEntity();
+        magazineContentsRepository.save(magazineContents);
     }
 
 }

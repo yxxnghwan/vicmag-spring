@@ -24,6 +24,7 @@ public class MagazineViewDTO {
 
     public MagazineView toEntity() {
         return MagazineView.builder()
+                .magazineViewSeq(this.magazineViewSeq)
                 .userId(userId)
                 .magazineSeq(magazineSeq)
                 .build();
