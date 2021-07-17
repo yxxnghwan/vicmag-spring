@@ -68,7 +68,7 @@ public class MagazineController {
     }
 
     /** 잡지 등록 API */
-    @PostMapping
+    @PostMapping("/magazines")
     public void postMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException{
         logger.info("잡지 보드 등록 요청");
         ObjectMapper objectMapper = new ObjectMapper();
