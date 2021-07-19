@@ -55,12 +55,18 @@ public class MagazineService {
     @Transactional
     public List<MagazineBoardDTO> findMagazineBoardList() {
         List<MagazineBoard> magazineBoardList = magazineBoardRepository.findAll();
+
+        if(magazineBoardList == null) return null;
+
         return MagazineBoard.toDTOList(magazineBoardList);
     }
 
     @Transactional
     public MagazineBoardDTO findMagazineBoard(Long boardSeq) {
         MagazineBoard magazineBoard = magazineBoardRepository.getById(boardSeq);
+
+        if(magazineBoard == null) return null;
+
         MagazineBoardDTO result = magazineBoard.toDTO();
         result.setCompany(magazineBoard.getCompany().toDTO());
         result.setMagazineList(Magazine.toDTOList(magazineRepository.findByBoardSeq(boardSeq)));
@@ -70,6 +76,9 @@ public class MagazineService {
     @Transactional
     public MagazineDTO findMagazine(Long magazineSeq) {
         Magazine magazine = magazineRepository.getById(magazineSeq);
+
+        if(magazine == null) return null;
+
         MagazineDTO result = magazine.toDTO();
         result.setBoard(magazine.getBoard().toDTO());
         result.setMagazineContentsList(MagazineContents.toDTOList(magazineContentsRepository.findByMagazineSeq(magazineSeq)));
@@ -79,6 +88,9 @@ public class MagazineService {
     @Transactional
     public MagazineContentsDTO findMagazineContents(Long contentsSeq) {
         MagazineContents magazineContents = magazineContentsRepository.getById(contentsSeq);
+
+        if(magazineContents == null) return null;
+
         MagazineContentsDTO result = magazineContents.toDTO();
         result.setMagazine(magazineContents.getMagazine().toDTO());
         return result;

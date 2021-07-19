@@ -20,19 +20,19 @@ public class MagazineBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long magazineBoardSeq;
 
-    @Column(columnDefinition = "nvarchar(30)", nullable = false)
+    @Column(length = 60, nullable = false)
     private String name;
 
-    @Column(columnDefinition = "nvarchar(300)")
+    @Column(length = 300)
     private String boardImgUrl;
 
-    @Column(columnDefinition = "nvarchar(1500)")
+    @Column(length = 1500)
     private String description;
 
     @Column(columnDefinition = "int", nullable = false)
     private Integer pricePerMonth;
 
-    @Column(columnDefinition = "nvarchar(20)")
+    @Column(length = 40)
     private String category;
 
     @ManyToOne

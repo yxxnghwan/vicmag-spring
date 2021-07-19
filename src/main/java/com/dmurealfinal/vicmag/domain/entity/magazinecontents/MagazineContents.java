@@ -22,13 +22,13 @@ public class MagazineContents {
     @Column(nullable = false)
     private Integer page;
 
-    @Column(columnDefinition = "nvarchar(10)", nullable = false)
+    @Column(length = 10, nullable = false)
     private String contentsType;
 
-    @Column(columnDefinition = "nvarchar(300)", nullable = false)
+    @Column(length = 300, nullable = false)
     private String contentsUrl;
 
-    @Column(columnDefinition = "nvarchar(300)")
+    @Column(length = 300)
     private String description;
 
     @ManyToOne

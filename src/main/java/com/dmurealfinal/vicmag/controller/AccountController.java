@@ -2,6 +2,7 @@ package com.dmurealfinal.vicmag.controller;
 
 import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.CompanyDTO;
+import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
 import com.dmurealfinal.vicmag.domain.dto.UserDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.*;
 import com.dmurealfinal.vicmag.service.AccountService;
@@ -31,6 +32,20 @@ public class AccountController {
 //        return accountService.findAccounts().stream().map(dto -> dto.toDto());
 //    }
 
+    /** 사용자 상세 조회 API */
+    @GetMapping("/user/{userId}")
+    public UserDTO getUser(HttpServletRequest request, HttpServletResponse response, @PathVariable String userId) {
+        logger.info("[getUser 요청]");
+        return accountService.findUser(userId);
+    }
+
+    /** 잡지사 상세 조회 API */
+    @GetMapping("/company/{companyId}")
+    public CompanyDTO getCompany(HttpServletRequest request, HttpServletResponse response, @PathVariable String companyId){
+        logger.info("[getCompany 요청]");
+        return accountService.findCompany(companyId);
+    }
+
     /** 사용자 추가 API */
     @PostMapping("/user")
     public void postUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
@@ -55,6 +70,24 @@ public class AccountController {
 
         // 저장
         accountService.saveCompany(accountDTO, companyDTO);
+    }
+
+    /** 사용자 정보 수정 */
+    @PutMapping("/user")
+    public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
+        logger.info("[updateUser 요청]");
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("User : " + objectMapper.writeValueAsString(userDTO));
+        accountService.updateUser(userDTO);
+    }
+
+    /** 잡지사 정보 수정 */
+    @PutMapping("/company")
+    public void updateCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException {
+        logger.info("[updateCompany 요청]");
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("User : " + objectMapper.writeValueAsString(companyDTO));
+        accountService.updateCompany(companyDTO);
     }
 
 }

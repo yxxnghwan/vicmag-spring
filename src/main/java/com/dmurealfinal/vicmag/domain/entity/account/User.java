@@ -14,20 +14,20 @@ import java.util.List;
 @Entity
 public class User {
     @Id
-    @Column(columnDefinition = "nvarchar(30)")
+    @Column(length = 30)
     private String accountId;
 
     @OneToOne
     @PrimaryKeyJoinColumn
     private Account account;
 
-    @Column(columnDefinition = "nvarchar(30)", nullable = false)
+    @Column(length = 60, nullable = false)
     private String name;
 
-    @Column(columnDefinition = "nvarchar(15)")
+    @Column(length = 30)
     private String phone;
 
-    @Column(columnDefinition = "nvarchar(100)")
+    @Column(length = 150)
     private String email;
 
     public User() {}

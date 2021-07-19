@@ -26,10 +26,10 @@ public class Payment {
     @Column(nullable = false)
     private Integer totalPrice;
 
-    @Column(columnDefinition = "nvarchar(150)")
+    @Column(length = 300)
     private String description;
 
-    @Column(columnDefinition = "nvarchar(20)", nullable = false)
+    @Column(length = 30, nullable = false)
     private String paymentType;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")

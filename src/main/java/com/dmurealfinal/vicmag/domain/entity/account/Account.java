@@ -4,6 +4,7 @@ import com.dmurealfinal.vicmag.domain.BaseTimeEntity;
 import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,13 +16,13 @@ import java.util.List;
 public class Account extends BaseTimeEntity {
 
     @Id
-    @Column(columnDefinition = "nvarchar(30)")
+    @Column(length = 30)
     private String accountId;
 
-    @Column(columnDefinition = "nvarchar(300)")
+    @Column(length = 300)
     private String password;
 
-    @Column(columnDefinition = "nvarchar(10)")
+    @Column(length = 10)
     private String accountType;
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.REMOVE)

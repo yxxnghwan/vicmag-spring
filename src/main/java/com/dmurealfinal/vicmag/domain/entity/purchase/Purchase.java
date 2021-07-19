@@ -20,13 +20,13 @@ public class Purchase extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long purchaseSeq;
 
-    @Column(columnDefinition = "nvarchar(20)", nullable = false)
+    @Column(length = 30, nullable = false)
     private String purchaseType;
 
-    @Column(columnDefinition = "nvarchar(30)")
+    @Column(length = 30)
     private String userId;
 
-    @Column(columnDefinition = "nvarchar(30)")
+    @Column(length = 30)
     private String companyId;
 
     @OneToOne(mappedBy = "purchase", cascade = CascadeType.REMOVE)

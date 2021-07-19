@@ -19,6 +19,32 @@ public class AccountService {
     @Autowired
     CompanyRepository companyRepository;
 
+    /** 전체 계정 조회(테스트) */
+    public List<Account> findAccounts() {
+        return accountRepository.findAll();
+    }
+
+    /** 유저 상세 조회 */
+    @Transactional
+    public UserDTO findUser(String userId) {
+        User user = userRepository.findByUserId(userId);
+
+        if(user == null) return null;
+
+        UserDTO result = user.toDTO();
+        return result;
+    }
+
+    /** 잡지사 상세 조회 */
+    public CompanyDTO findCompany(String companyId) {
+        Company company = companyRepository.findByCompanyId(companyId);
+
+        if(company == null) return null;
+
+        CompanyDTO result = company.toDTO();
+        return result;
+    }
+
     /** 유저 추가 */
     @Transactional
     public void saveUser(AccountDTO accountDTO, UserDTO userDTO) {
@@ -33,7 +59,15 @@ public class AccountService {
         companyRepository.save(companyDTO.toEntity());
     }
 
-    public List<Account> findAccounts() {
-        return accountRepository.findAll();
+    /** 유저 정보 수정 */
+    @Transactional
+    public void updateUser(UserDTO userDTO) {
+        userRepository.updateUser(userDTO.getAccountId(), userDTO.getEmail(), userDTO.getName(), userDTO.getPhone());
+    }
+
+    /** 잡지사 정보 수정 */
+    @Transactional
+    public void updateCompany(CompanyDTO companyDTO) {
+        companyRepository.updateCompany(companyDTO.getAccountId(), companyDTO.getEmail(), companyDTO.getName(), companyDTO.getPhone(), companyDTO.getCompanyRegistrationNumber());
     }
 }

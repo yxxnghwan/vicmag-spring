@@ -20,19 +20,19 @@ public class Magazine extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long magazineSeq;
 
-    @Column(columnDefinition = "nvarchar(30)", nullable = false)
+    @Column(length = 60, nullable = false)
     private String name;
 
-    @Column(columnDefinition = "nvarchar(300)")
+    @Column(length = 300)
     private String coverImgUrl;
 
     @Column(columnDefinition = "int", nullable = false)
     private Integer price;
 
-    @Column(columnDefinition = "nvarchar(1000)")
+    @Column(length = 1000)
     private String tag;
 
-    @Column(columnDefinition = "nvarchar(300)")
+    @Column(length = 300)
     private String bgmUrl;
 
     @ManyToOne
