@@ -70,4 +70,18 @@ public class AccountService {
     public void updateCompany(CompanyDTO companyDTO) {
         companyRepository.updateCompany(companyDTO.getAccountId(), companyDTO.getEmail(), companyDTO.getName(), companyDTO.getPhone(), companyDTO.getCompanyRegistrationNumber());
     }
+
+    /** 계정 삭제 */
+    @Transactional
+    public void deleteUser(String userId) {
+        //userRepository.deleteById(userId);
+        accountRepository.deleteById(userId);
+    }
+
+    /** 잡지사 삭제 */
+    @Transactional
+    public void deleteCompany(String companyId) {
+        //companyRepository.deleteById(companyId);
+        accountRepository.deleteById(companyId);
+    }
 }

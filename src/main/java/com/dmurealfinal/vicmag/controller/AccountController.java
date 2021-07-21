@@ -72,7 +72,7 @@ public class AccountController {
         accountService.saveCompany(accountDTO, companyDTO);
     }
 
-    /** 사용자 정보 수정 */
+    /** 사용자 정보 수정 API */
     @PutMapping("/user")
     public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
         logger.info("[updateUser 요청]");
@@ -81,7 +81,7 @@ public class AccountController {
         accountService.updateUser(userDTO);
     }
 
-    /** 잡지사 정보 수정 */
+    /** 잡지사 정보 수정 API */
     @PutMapping("/company")
     public void updateCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException {
         logger.info("[updateCompany 요청]");
@@ -90,4 +90,17 @@ public class AccountController {
         accountService.updateCompany(companyDTO);
     }
 
+    /** 사용자 삭제 API */
+    @DeleteMapping("/user")
+    public void deleteUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
+        logger.info("[deleteUser 요청]");
+        accountService.deleteUser(userDTO.getAccountId());
+    }
+
+    /** 잡지사 삭제 API */
+    @DeleteMapping("/company")
+    public void deleteCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException {
+        logger.info("[deleteCompany 요청]");
+        accountService.deleteCompany(companyDTO.getAccountId());
+    }
 }
