@@ -34,24 +34,28 @@ public class MagazineService {
     @Autowired
     MagazineViewRepository magazineViewRepository;
 
+    /** 잡지 보드 추가 */
     @Transactional
     public void saveBoard(MagazineBoardDTO boardDTO) {
         MagazineBoard board = boardDTO.toEntity();
         magazineBoardRepository.save(board);
     }
 
+    /** 잡지 추가 */
     @Transactional
     public void saveMagazine(MagazineDTO magazineDTO) {
         Magazine magazine = magazineDTO.toEntity();
         magazineRepository.save(magazine);
     }
 
+    /** 잡지 컨텐츠 추가 */
     @Transactional
     public void saveMagazineContents(MagazineContentsDTO magazineContentsDTO) {
         MagazineContents magazineContents = magazineContentsDTO.toEntity();
         magazineContentsRepository.save(magazineContents);
     }
 
+    /** 잡지 보드 리스트 조회 */
     @Transactional
     public List<MagazineBoardDTO> findMagazineBoardList() {
         List<MagazineBoard> magazineBoardList = magazineBoardRepository.findAll();
@@ -61,6 +65,7 @@ public class MagazineService {
         return MagazineBoard.toDTOList(magazineBoardList);
     }
 
+    /** 잡지 보드 상세조회 */
     @Transactional
     public MagazineBoardDTO findMagazineBoard(Long boardSeq) {
         MagazineBoard magazineBoard = magazineBoardRepository.getById(boardSeq);
@@ -73,6 +78,7 @@ public class MagazineService {
         return result;
     }
 
+    /** 잡지 상세 조회 */
     @Transactional
     public MagazineDTO findMagazine(Long magazineSeq) {
         Magazine magazine = magazineRepository.getById(magazineSeq);
@@ -85,6 +91,7 @@ public class MagazineService {
         return result;
     }
 
+    /** 잡지 컨텐츠 조회 */
     @Transactional
     public MagazineContentsDTO findMagazineContents(Long contentsSeq) {
         MagazineContents magazineContents = magazineContentsRepository.getById(contentsSeq);
@@ -96,4 +103,15 @@ public class MagazineService {
         return result;
     }
 
+    /** 잡지 보드 수정 */
+    @Transactional
+    public void updateMagazineBoard(MagazineBoardDTO magazineBoardDTO) {
+        magazineBoardRepository.updateMagazineBoard(magazineBoardDTO.getMagazineBoardSeq(), magazineBoardDTO.getName(), magazineBoardDTO.getBoardImgUrl(), magazineBoardDTO.getDescription(), magazineBoardDTO.getPricePerMonth(), magazineBoardDTO.getCategory());
+    }
+
+    /** 잡지 보드 삭제 */
+    @Transactional
+    public void deleteMagazineBoard(Long magazineBoardSeq) {
+        magazineBoardRepository.deleteById(magazineBoardSeq);
+    }
 }
