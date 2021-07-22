@@ -3,6 +3,7 @@ package com.dmurealfinal.vicmag.controller;
 import com.dmurealfinal.vicmag.domain.dto.MagazineBoardDTO;
 import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
 import com.dmurealfinal.vicmag.domain.dto.MagazineDTO;
+import com.dmurealfinal.vicmag.domain.dto.MagazineViewDTO;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import com.dmurealfinal.vicmag.service.MagazineService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -98,5 +99,52 @@ public class MagazineController {
     public void deleteBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException {
         logger.info("[deleteBoard] 요청");
         magazineService.deleteMagazineBoard(magazineBoardDTO.getMagazineBoardSeq());
+    }
+
+    /** 잡지 수정 API */
+    @PutMapping("/magazines")
+    public void updateMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException {
+        logger.info("[updateMagazine] 요청");
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("Magazine : " + objectMapper.writeValueAsString(magazineDTO));
+
+        magazineService.updateMagazine(magazineDTO);
+    }
+
+    /** 잡지 삭제 API */
+    @DeleteMapping("/magazines")
+    public void deleteMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException {
+        logger.info("[deleteMagazine] 요청");
+        logger.info("magazineSeq : " + magazineDTO.getMagazineSeq());
+
+        magazineService.deleteMagazine(magazineDTO.getMagazineSeq());
+    }
+
+    /** 잡지 컨텐츠 수정 */
+    @PutMapping("/contents")
+    public void updateContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException {
+        logger.info("[updateContents] 요청");
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("MagazineContents : " + objectMapper.writeValueAsString(magazineContentsDTO));
+
+        magazineService.updateMagazineContents(magazineContentsDTO);
+    }
+
+    /** 잡지 컨텐츠 삭제 API */
+    @DeleteMapping("/contents")
+    public void deleteContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException {
+        logger.info("[deleteContents] 요청");
+        logger.info("magazineContentsSeq : " + magazineContentsDTO.getMagazineContentsSeq());
+        magazineService.deleteMagazineContents(magazineContentsDTO.getMagazineContentsSeq());
+    }
+
+    /** 잡지 조회수 증가 API */
+    @PostMapping("/view")
+    public void viewMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineViewDTO magazineViewDTO) throws JsonProcessingException {
+        logger.info("[viewMagazine] 요청");
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("MagazineView : " + objectMapper.writeValueAsString(magazineViewDTO));
+
+        magazineService.saveMagazineView(magazineViewDTO);
     }
 }

@@ -3,6 +3,7 @@ package com.dmurealfinal.vicmag.service;
 import com.dmurealfinal.vicmag.domain.dto.MagazineBoardDTO;
 import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
 import com.dmurealfinal.vicmag.domain.dto.MagazineDTO;
+import com.dmurealfinal.vicmag.domain.dto.MagazineViewDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.CompanyRepository;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import com.dmurealfinal.vicmag.domain.entity.magazine.MagazineRepository;
@@ -10,6 +11,7 @@ import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoardRepository;
 import com.dmurealfinal.vicmag.domain.entity.magazinecontents.MagazineContents;
 import com.dmurealfinal.vicmag.domain.entity.magazinecontents.MagazineContentsRepository;
+import com.dmurealfinal.vicmag.domain.entity.magazineview.MagazineView;
 import com.dmurealfinal.vicmag.domain.entity.magazineview.MagazineViewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -113,5 +115,38 @@ public class MagazineService {
     @Transactional
     public void deleteMagazineBoard(Long magazineBoardSeq) {
         magazineBoardRepository.deleteById(magazineBoardSeq);
+    }
+
+    /** 잡지 수정 */
+    @Transactional
+    public void updateMagazine(MagazineDTO magazineDTO) {
+        magazineRepository.updateMagazine(magazineDTO.getMagazineSeq(), magazineDTO.getName(), magazineDTO.getCoverImgUrl(), magazineDTO.getPrice(), magazineDTO.getTag(), magazineDTO.getBgmUrl());
+    }
+
+    /** 잡지 삭제 */
+    @Transactional
+    public void deleteMagazine(Long magazineSeq) {
+        magazineRepository.deleteById(magazineSeq);
+    }
+
+    /** 컨텐츠 수정 */
+    @Transactional
+    public void updateMagazineContents(MagazineContentsDTO magazineContentsDTO) {
+        magazineContentsRepository.updateMagazineContents(magazineContentsDTO.getMagazineContentsSeq(), magazineContentsDTO.getPage(), magazineContentsDTO.getContentsType(), magazineContentsDTO.getContentsUrl(), magazineContentsDTO.getDescription());
+    }
+
+    /** 컨텐츠 삭제 */
+    @Transactional
+    public void deleteMagazineContents(Long magazineContentsSeq) {
+        magazineContentsRepository.deleteById(magazineContentsSeq);
+    }
+
+    /** 잡지 조회수 증가 API */
+    @Transactional
+    public void saveMagazineView(MagazineViewDTO magazineViewDTO) {
+        if(magazineViewRepository.existsView(magazineViewDTO.getUserId(), magazineViewDTO.getMagazineSeq()) == null) {
+            MagazineView magazineView = magazineViewDTO.toEntity();
+            magazineViewRepository.save(magazineView);
+        }
     }
 }

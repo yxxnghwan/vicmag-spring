@@ -21,7 +21,7 @@ public class Company {
     @PrimaryKeyJoinColumn
     private Account account;
 
-    @Column(length = 300, unique = true, nullable = false)
+    @Column(length = 100, unique = true, nullable = false)
     private String companyRegistrationNumber;
 
     @Column(length = 60, nullable = false)
