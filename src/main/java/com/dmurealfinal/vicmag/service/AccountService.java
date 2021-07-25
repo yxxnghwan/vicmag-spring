@@ -74,14 +74,14 @@ public class AccountService {
     /** 계정 삭제 */
     @Transactional
     public void deleteUser(String userId) {
-        //userRepository.deleteById(userId);
+        userRepository.deleteById(userId);
         accountRepository.deleteById(userId);
     }
 
     /** 잡지사 삭제 */
     @Transactional
     public void deleteCompany(String companyId) {
-        //companyRepository.deleteById(companyId);
+        companyRepository.deleteById(companyId);
         accountRepository.deleteById(companyId);
     }
 }

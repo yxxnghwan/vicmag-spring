@@ -41,4 +41,18 @@ public class PurchaseController {
         subscribeDTO.getPurchase().setPurchaseType("subscribe");
         purchaseService.saveSubscribe(subscribeDTO);
     }
+
+    /** 단건 구매 취소 API */
+    @DeleteMapping("single")
+    public void deleteSinglePurchase(HttpServletRequest request, HttpServletResponse response, @RequestBody SinglePurchaseDTO singlePurchaseDTO) throws JsonProcessingException {
+        logger.info("[deleteSinglePurchase] 요청");
+        purchaseService.deleteSinglePurchase(singlePurchaseDTO.getPurchaseSeq());
+    }
+
+    /** 구독 구매 취소 API */
+    @DeleteMapping("subscribe")
+    public void deleteSubscribe(HttpServletRequest request, HttpServletResponse response, @RequestBody SubscribeDTO subscribeDTO) throws JsonProcessingException {
+        logger.info("[deleteSubscribe] 요청");
+        purchaseService.deleteSubscribe(subscribeDTO.getPurchaseSeq());
+    }
 }

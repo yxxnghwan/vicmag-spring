@@ -44,4 +44,18 @@ public class PurchaseService {
         Subscribe subscribe = subscribeDTO.toEntity();
         subscribeRepository.save(subscribe);
     }
+
+    /** 단건 구매 삭제 */
+    @Transactional
+    public void deleteSinglePurchase(Long purchaseSeq) {
+        singlePurchaseRepository.deleteById(purchaseSeq);
+        purchaseRepository.deleteById(purchaseSeq);
+    }
+
+    /** 구독 구매 삭제 */
+    @Transactional
+    public void deleteSubscribe(Long purchaseSeq) {
+        subscribeRepository.deleteById(purchaseSeq);
+        purchaseRepository.deleteById(purchaseSeq);
+    }
 }
