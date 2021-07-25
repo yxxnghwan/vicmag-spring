@@ -1,8 +1,11 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
-import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
 import com.dmurealfinal.vicmag.domain.dto.SubscribeDTO;
-import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,12 +26,11 @@ public class Subscribe {
     @PrimaryKeyJoinColumn
     private Purchase purchase;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(columnDefinition = "datetime default now()")
+
+    @Column
     private LocalDateTime startDateTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(columnDefinition = "datetime", nullable = false)
+    @Column
     private LocalDateTime endDateTime;
 
     @Column(columnDefinition = "double")

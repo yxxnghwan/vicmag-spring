@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class Magazine extends BaseTimeEntity {
     public Magazine() {}
 
     @Builder
-    public Magazine(Long magazineSeq, String name, String coverImgUrl, Integer price, String tag, String bgmUrl, MagazineBoard board) {
+    public Magazine(Long magazineSeq, String name, String coverImgUrl, Integer price, String tag, String bgmUrl, MagazineBoard board, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.magazineSeq = magazineSeq;
         this.name = name;
         this.coverImgUrl = coverImgUrl;
@@ -50,6 +51,8 @@ public class Magazine extends BaseTimeEntity {
         this.tag = tag;
         this.bgmUrl = bgmUrl;
         this.board = board;
+        this.createdDateTime = createdDateTime;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     public MagazineDTO toDTO() {
@@ -60,6 +63,8 @@ public class Magazine extends BaseTimeEntity {
                 .price(this.price)
                 .tag(this.tag)
                 .bgmUrl(this.bgmUrl)
+                .createdDateTime(this.createdDateTime)
+                .modifiedDateTime(this.modifiedDateTime)
                 .build();
     }
 

@@ -1,5 +1,7 @@
 package com.dmurealfinal.vicmag.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,11 +15,11 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @CreatedDate
-    private LocalDateTime createdDateTime;
+    protected LocalDateTime createdDateTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @LastModifiedDate
-    private LocalDateTime modifiedDateTime;
+    protected LocalDateTime modifiedDateTime;
 }

@@ -1,14 +1,12 @@
 package com.dmurealfinal.vicmag.domain.entity.purchase;
 
 import com.dmurealfinal.vicmag.domain.BaseTimeEntity;
-import com.dmurealfinal.vicmag.domain.dto.PaymentDTO;
 import com.dmurealfinal.vicmag.domain.dto.PurchaseDTO;
-import com.dmurealfinal.vicmag.domain.entity.account.Company;
-import com.dmurealfinal.vicmag.domain.entity.account.User;
 import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class Purchase extends BaseTimeEntity {
     public Purchase() {}
 
     @Builder
-    public Purchase(Long purchaseSeq, String purchaseType, String userId, String companyId, SinglePurchase singlePurchase, Subscribe subscribe, Payment payment) {
+    public Purchase(Long purchaseSeq, String purchaseType, String userId, String companyId, SinglePurchase singlePurchase, Subscribe subscribe, Payment payment, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.purchaseSeq = purchaseSeq;
         this.purchaseType = purchaseType;
         this.userId = userId;
@@ -49,6 +47,8 @@ public class Purchase extends BaseTimeEntity {
         this.singlePurchase = singlePurchase;
         this.subscribe = subscribe;
         this.payment = payment;
+        this.createdDateTime = createdDateTime;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     public PurchaseDTO toDTO() {
@@ -56,6 +56,8 @@ public class Purchase extends BaseTimeEntity {
                 .purchaseType(this.purchaseType)
                 .userId(this.userId)
                 .companyId(this.companyId)
+                .createdDateTime(this.createdDateTime)
+                .modifiedDateTime(this.modifiedDateTime)
                 .build();
     }
 

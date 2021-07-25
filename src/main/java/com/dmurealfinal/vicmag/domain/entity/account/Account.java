@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.hibernate.annotations.Nationalized;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,10 +35,12 @@ public class Account extends BaseTimeEntity {
     public Account() {}
 
     @Builder
-    public Account(String accountId, String password, String accountType) {
+    public Account(String accountId, String password, String accountType, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.accountId = accountId;
         this.password = password;
         this.accountType = accountType;
+        this.createdDateTime = createdDateTime;
+        this.modifiedDateTime = createdDateTime;
     }
 
     public AccountDTO toDTO() {
@@ -45,6 +48,8 @@ public class Account extends BaseTimeEntity {
                 .accountId(this.accountId)
                 .password(this.password)
                 .accountType(this.accountType)
+                .createdDateTime(this.createdDateTime)
+                .modifiedDateTime(this.modifiedDateTime)
                 .build();
     }
 

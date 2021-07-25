@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.entity.account;
 
+import com.dmurealfinal.vicmag.domain.BaseTimeEntity;
 import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.CompanyDTO;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Table(name = "TB_COMPANY")
 @Entity
-public class Company {
+public class Company{
     @Id
     @Column(length = 30)
     private String accountId;
