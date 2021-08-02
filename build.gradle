@@ -40,6 +40,9 @@ dependencies {
     testCompileOnly('org.springframework.boot:spring-boot-starter-test')
     testCompileOnly 'junit:junit:4.12'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
 }
 
 test {

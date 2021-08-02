@@ -32,6 +32,25 @@ public class AccountController {
 //        return accountService.findAccounts().stream().map(dto -> dto.toDto());
 //    }
 
+    /** 로그인 API */
+    @PostMapping("/login/user")
+    public UserDTO loginUser(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException{
+        logger.info("[loginUser 요청]");
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("Account : " + objectMapper.writeValueAsString(accountDTO));
+        UserDTO userDTO = accountService.findUser(accountDTO.getAccountId());
+        if(userDTO != null) {
+            // 계정 찾음
+            if(BCrypt.checkpw(accountDTO.getPassword(), userDTO.getAccount().getPassword())) {
+
+            } else {
+                // 비밀번호 오류
+            }
+        } else {
+            // 존재하지 않는 계정
+        }
+    }
+
     /** 사용자 상세 조회 API */
     @GetMapping("/user/{userId}")
     public UserDTO getUser(HttpServletRequest request, HttpServletResponse response, @PathVariable String userId) {
