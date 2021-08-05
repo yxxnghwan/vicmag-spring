@@ -43,7 +43,7 @@ public class JWTManager {
         calendar.setTimeInMillis(date.getTime());
         calendar.add(Calendar.MONTH, 6);
         date.setTime(calendar.getTimeInMillis());
-        System.out.println("입력만료시간" + date);
+        logger.info("입력만료시간" + date);
         payloads.put("exp", date);
         payloads.put("accountType", accountDTO.getAccountType());
         payloads.put("accountId",accountDTO.getAccountId());
@@ -57,7 +57,7 @@ public class JWTManager {
     }
 
     // JWT 디코딩
-    public static AccountDTO decodeJWT(String jwt, HttpServletRequest request, HttpServletResponse response) {
+    public static AccountDTO decodeJWT(String jwt, HttpServletResponse response) {
         AccountDTO accountDTO = null;
         try {
             Claims claims = Jwts.parser()
@@ -76,6 +76,7 @@ public class JWTManager {
             if(expiration.getTime() < now.getTime()) {
                 logger.info("jwt 기간 만료");
                 accountDTO = null;
+                response.setHeader(headerName, null);
             }
             // 기간이 얼마 남지 않았을 때
             else if(expiration.getTime()-1000*60*60*24*30 < now.getTime()) {
@@ -84,11 +85,12 @@ public class JWTManager {
 
                 // 헤더에 넣기
                 response.setHeader(JWTManager.headerName, newJWT);
-                accountDTO = JWTManager.decodeJWT(newJWT, request, response);
+                accountDTO = JWTManager.decodeJWT(newJWT, response);
             }
         } catch(JwtException e) {
             logger.info("토큰 변조 위험");
             accountDTO = null;						// null값으로 넘겨줘서 다시 로그인하도록
+            response.setHeader(headerName, null);
         }
 
         // 정상 토큰 그냥 계정 리턴

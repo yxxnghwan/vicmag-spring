@@ -112,6 +112,14 @@ public class AccountController {
     @PutMapping("/user")
     public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
         logger.info("[updateUser 요청]");
+        AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
+
+        if(loginAccount != null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("User : " + objectMapper.writeValueAsString(userDTO));
         accountService.updateUser(userDTO);
