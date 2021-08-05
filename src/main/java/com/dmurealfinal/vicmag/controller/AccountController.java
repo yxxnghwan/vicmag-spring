@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.controller;
 
+import com.dmurealfinal.vicmag.config.JWTManager;
 import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.CompanyDTO;
 import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,22 +35,37 @@ public class AccountController {
 //    }
 
     /** 로그인 API */
-    @PostMapping("/login/user")
-    public UserDTO loginUser(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException{
-        logger.info("[loginUser 요청]");
+    @PostMapping("/login")
+    public AccountDTO loginAccount(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException{
+        logger.info("[loginAccount 요청]");
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Account : " + objectMapper.writeValueAsString(accountDTO));
-        UserDTO userDTO = accountService.findUser(accountDTO.getAccountId());
-        if(userDTO != null) {
-            // 계정 찾음
-            if(BCrypt.checkpw(accountDTO.getPassword(), userDTO.getAccount().getPassword())) {
 
+        AccountDTO find = null;
+
+        find = accountService.findAccountById(accountDTO.getAccountId());
+        logger.info(objectMapper.writeValueAsString(find));
+
+        if(find != null) {
+            // 계정 찾음
+            logger.info("계정 있음");
+            if(BCrypt.checkpw(accountDTO.getPassword(), find.getPassword())) {
+                // 비밀번호 정상
+                logger.info("로그인 성공");
+                response.setHeader("Authorization", JWTManager.createJWT(accountDTO));
             } else {
                 // 비밀번호 오류
+                logger.info("비밀번호 오류");
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                find = null;
             }
         } else {
             // 존재하지 않는 계정
+            logger.info("계정 없음");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            find = null;
         }
+        return find;
     }
 
     /** 사용자 상세 조회 API */

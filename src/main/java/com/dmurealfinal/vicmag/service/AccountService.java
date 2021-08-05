@@ -24,6 +24,21 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
+    /** 계정 ID로 조회 */
+    @Transactional
+    public AccountDTO findAccountById(String accountId) {
+        Account account = accountRepository.findById(accountId).get();
+        if(account == null) return null;
+
+        AccountDTO result = account.toDTO();
+        if(account.getAccountType().equals("user")) {
+            result.setUser(account.getUser().toDTO());
+        } else if(account.getAccountType().equals("company")) {
+            result.setCompany(account.getCompany().toDTO());
+        }
+        return result;
+    }
+
     /** 유저 상세 조회 */
     @Transactional
     public UserDTO findUser(String userId) {
