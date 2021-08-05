@@ -39,10 +39,10 @@ public class JWTFilter implements Filter {
             AccountDTO loginAccount = JWTManager.decodeJWT(jwt, response);
             if(loginAccount != null) {
                 response.setHeader("Authorization", jwt);
-                request.setAttribute("loginAccount", loginAccount);
             } else {
                 response.setHeader("Authorization", null);
             }
+            request.setAttribute("loginAccount", loginAccount);
         }
 
         chain.doFilter(request, response);

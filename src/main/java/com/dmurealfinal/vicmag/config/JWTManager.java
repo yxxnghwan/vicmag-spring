@@ -58,7 +58,7 @@ public class JWTManager {
 
     // JWT 디코딩
     public static AccountDTO decodeJWT(String jwt, HttpServletResponse response) {
-        AccountDTO accountDTO = null;
+        AccountDTO resultAccount = null;
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(JWTManager.JWTkey.getBytes())
@@ -68,32 +68,32 @@ public class JWTManager {
             Date expiration = claims.get("exp", Date.class);
             expiration.setTime(expiration.getTime()/1000); // 이상하게 입력할때 밀리초를 초로 받음 그래서 나올땐 또 1000을 곱해서 나옴...
             Date now = new Date();
-            accountDTO = new AccountDTO();
-            accountDTO.setAccountId(claims.get("accountId", String.class));
-            accountDTO.setAccountType(claims.get("accountType", String.class));
+            resultAccount = new AccountDTO();
+            resultAccount.setAccountId(claims.get("accountId", String.class));
+            resultAccount.setAccountType(claims.get("accountType", String.class));
 
             // 기간 만료시 null 리턴
             if(expiration.getTime() < now.getTime()) {
                 logger.info("jwt 기간 만료");
-                accountDTO = null;
+                resultAccount = null;
                 response.setHeader(headerName, null);
             }
             // 기간이 얼마 남지 않았을 때
             else if(expiration.getTime()-1000*60*60*24*30 < now.getTime()) {
                 logger.info("토큰 기간이 한달 이내로 남아 새 토큰 발급");
-                String newJWT = JWTManager.createJWT(accountDTO);
+                String newJWT = JWTManager.createJWT(resultAccount);
 
                 // 헤더에 넣기
                 response.setHeader(JWTManager.headerName, newJWT);
-                accountDTO = JWTManager.decodeJWT(newJWT, response);
+                resultAccount = JWTManager.decodeJWT(newJWT, response);
             }
         } catch(JwtException e) {
             logger.info("토큰 변조 위험");
-            accountDTO = null;						// null값으로 넘겨줘서 다시 로그인하도록
+            resultAccount = null;						// null값으로 넘겨줘서 다시 로그인하도록
             response.setHeader(headerName, null);
         }
 
         // 정상 토큰 그냥 계정 리턴
-        return accountDTO;
+        return resultAccount;
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -112,12 +113,21 @@ public class AccountController {
     @PutMapping("/user")
     public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
         logger.info("[updateUser 요청]");
-        AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
 
-        if(loginAccount != null) {
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return;
+        }
+
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(userDTO.getAccountId())) {
+                logger.info("수정하려는 계정정보로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -129,6 +139,23 @@ public class AccountController {
     @PutMapping("/company")
     public void updateCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException {
         logger.info("[updateCompany 요청]");
+
+        AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(companyDTO.getAccountId())) {
+                logger.info("수정하려는 계정정보로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("User : " + objectMapper.writeValueAsString(companyDTO));
         accountService.updateCompany(companyDTO);
@@ -138,6 +165,23 @@ public class AccountController {
     @DeleteMapping("/user")
     public void deleteUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
         logger.info("[deleteUser 요청]");
+
+        AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(userDTO.getAccountId())) {
+                logger.info("삭제하려는 계정정보로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         accountService.deleteUser(userDTO.getAccountId());
     }
 
@@ -145,6 +189,23 @@ public class AccountController {
     @DeleteMapping("/company")
     public void deleteCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException {
         logger.info("[deleteCompany 요청]");
+
+        AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(companyDTO.getAccountId())) {
+                logger.info("삭제하려는 계정정보로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         accountService.deleteCompany(companyDTO.getAccountId());
     }
 }
