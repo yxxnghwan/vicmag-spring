@@ -90,6 +90,8 @@ public class MagazineService {
         MagazineDTO result = magazine.toDTO();
         result.setBoard(magazine.getBoard().toDTO());
         result.setMagazineContentsList(MagazineContents.toDTOList(magazineContentsRepository.findByMagazineSeq(magazineSeq)));
+        result.getBoard().setCompany(magazine.getBoard().getCompany().toDTO());
+        result.getBoard().setMagazineList(Magazine.toDTOList(magazineRepository.findByBoardSeq(magazine.getBoard().getMagazineBoardSeq())));
         return result;
     }
 
@@ -102,6 +104,9 @@ public class MagazineService {
 
         MagazineContentsDTO result = magazineContents.toDTO();
         result.setMagazine(magazineContents.getMagazine().toDTO());
+        result.getMagazine().setBoard(magazineContents.getMagazine().getBoard().toDTO());
+        result.getMagazine().getBoard().setCompany(magazineContents.getMagazine().getBoard().getCompany().toDTO());
+        result.getMagazine().setMagazineContentsList(MagazineContents.toDTOList(magazineContentsRepository.findByMagazineSeq(magazineContents.getMagazine().getMagazineSeq())));
         return result;
     }
 

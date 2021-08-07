@@ -1,9 +1,6 @@
 package com.dmurealfinal.vicmag.controller;
 
-import com.dmurealfinal.vicmag.domain.dto.MagazineBoardDTO;
-import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
-import com.dmurealfinal.vicmag.domain.dto.MagazineDTO;
-import com.dmurealfinal.vicmag.domain.dto.MagazineViewDTO;
+import com.dmurealfinal.vicmag.domain.dto.*;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import com.dmurealfinal.vicmag.service.MagazineService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,6 +58,23 @@ public class MagazineController {
     @PostMapping("/boards")
     public void postBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException {
         logger.info("[postBoard] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(magazineBoardDTO.getCompany().getAccountId())) {
+                logger.info("등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("MagazineBoard : " + objectMapper.writeValueAsString(magazineBoardDTO));
         magazineService.saveBoard(magazineBoardDTO);
@@ -69,6 +84,24 @@ public class MagazineController {
     @PostMapping("/magazines")
     public void postMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException{
         logger.info("[postMagazine] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        MagazineBoardDTO magazineBoardDTO = magazineService.findMagazineBoard(magazineDTO.getBoard().getMagazineBoardSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(magazineBoardDTO.getCompany().getAccountId())) {
+                logger.info("등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Magazine : " + objectMapper.writeValueAsString(magazineDTO));
         magazineService.saveMagazine(magazineDTO);
@@ -78,6 +111,24 @@ public class MagazineController {
     @PostMapping("/contents")
     public void postMagazineContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException{
         logger.info("[postMagazineContents] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        MagazineDTO magazineDTO = magazineService.findMagazine(magazineContentsDTO.getMagazine().getMagazineSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(magazineDTO.getBoard().getCompany().getAccountId())) {
+                logger.info("등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("MagazineContents : " + objectMapper.writeValueAsString(magazineContentsDTO));
 
@@ -88,6 +139,24 @@ public class MagazineController {
     @PutMapping("/boards")
     public void updateBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException {
         logger.info("[updateBoard] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        MagazineBoardDTO oldObject = magazineService.findMagazineBoard(magazineBoardDTO.getMagazineBoardSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(oldObject.getCompany().getAccountId())) {
+                logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("MagazineBoard : " + objectMapper.writeValueAsString(magazineBoardDTO));
 
@@ -98,6 +167,24 @@ public class MagazineController {
     @DeleteMapping("/boards")
     public void deleteBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException {
         logger.info("[deleteBoard] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        MagazineBoardDTO oldObject = magazineService.findMagazineBoard(magazineBoardDTO.getMagazineBoardSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(oldObject.getCompany().getAccountId())) {
+                logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         magazineService.deleteMagazineBoard(magazineBoardDTO.getMagazineBoardSeq());
     }
 
@@ -105,6 +192,24 @@ public class MagazineController {
     @PutMapping("/magazines")
     public void updateMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException {
         logger.info("[updateMagazine] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        MagazineDTO oldObject = magazineService.findMagazine(magazineDTO.getMagazineSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(oldObject.getBoard().getCompany().getAccountId())) {
+                logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Magazine : " + objectMapper.writeValueAsString(magazineDTO));
 
@@ -115,6 +220,24 @@ public class MagazineController {
     @DeleteMapping("/magazines")
     public void deleteMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException {
         logger.info("[deleteMagazine] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        MagazineDTO oldObject = magazineService.findMagazine(magazineDTO.getMagazineSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(oldObject.getBoard().getCompany().getAccountId())) {
+                logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         logger.info("magazineSeq : " + magazineDTO.getMagazineSeq());
 
         magazineService.deleteMagazine(magazineDTO.getMagazineSeq());
@@ -124,6 +247,24 @@ public class MagazineController {
     @PutMapping("/contents")
     public void updateContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException {
         logger.info("[updateContents] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        MagazineContentsDTO oldObject = magazineService.findMagazineContents(magazineContentsDTO.getMagazineContentsSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(oldObject.getMagazine().getBoard().getCompany().getAccountId())) {
+                logger.info("수정하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("MagazineContents : " + objectMapper.writeValueAsString(magazineContentsDTO));
 
@@ -134,6 +275,24 @@ public class MagazineController {
     @DeleteMapping("/contents")
     public void deleteContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException {
         logger.info("[deleteContents] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        MagazineDTO magazineDTO = magazineService.findMagazine(magazineContentsDTO.getMagazine().getMagazineSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(magazineDTO.getBoard().getCompany().getAccountId())) {
+                logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
         logger.info("magazineContentsSeq : " + magazineContentsDTO.getMagazineContentsSeq());
         magazineService.deleteMagazineContents(magazineContentsDTO.getMagazineContentsSeq());
     }
