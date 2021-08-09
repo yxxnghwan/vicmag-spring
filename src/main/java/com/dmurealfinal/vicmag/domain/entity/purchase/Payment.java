@@ -29,6 +29,9 @@ public class Payment {
     @Column(length = 300)
     private String description;
 
+    @Column(length = 30)
+    private String pg;
+
     @Column(length = 30, nullable = false)
     private String paymentType;
 
@@ -39,7 +42,7 @@ public class Payment {
     public Payment() {}
 
     @Builder
-    public Payment(Long purchaseSeq, Integer totalPrice, String description, String paymentType, LocalDateTime payDateTime) {
+    public Payment(Long purchaseSeq, Integer totalPrice, String description, String pg, String paymentType, LocalDateTime payDateTime) {
         this.purchaseSeq = purchaseSeq;
         this.totalPrice = totalPrice;
         this.description = description;
@@ -52,6 +55,7 @@ public class Payment {
                 .purchaseSeq(this.purchaseSeq)
                 .totalPrice(this.totalPrice)
                 .description(this.description)
+                .pg(this.pg)
                 .paymentType(this.paymentType)
                 .payDateTime(this.payDateTime)
                 .build();

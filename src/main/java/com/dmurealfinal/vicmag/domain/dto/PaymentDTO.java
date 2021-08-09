@@ -16,6 +16,8 @@ public class PaymentDTO {
 
     private String description;
 
+    private String pg;
+
     private String paymentType;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -27,13 +29,14 @@ public class PaymentDTO {
     public PaymentDTO() {}
 
     @Builder
-    public PaymentDTO(Long purchaseSeq, Integer totalPrice, String description, String paymentType, LocalDateTime payDateTime, PurchaseDTO purchase) {
+    public PaymentDTO(Long purchaseSeq, Integer totalPrice, String description, String pg, String paymentType, LocalDateTime payDateTime, PurchaseDTO purchase) {
         this.purchaseSeq = purchaseSeq;
         this.totalPrice = totalPrice;
         this.description = description;
         this.paymentType = paymentType;
         this.payDateTime = payDateTime;
         this.purchase = purchase;
+        this.pg = pg;
     }
 
     public Payment toEntity() {
@@ -41,6 +44,7 @@ public class PaymentDTO {
                 .purchaseSeq(this.purchaseSeq)
                 .totalPrice(this.totalPrice)
                 .description(this.description)
+                .pg(this.pg)
                 .paymentType(this.paymentType)
                 .payDateTime(this.payDateTime)
                 .build();
