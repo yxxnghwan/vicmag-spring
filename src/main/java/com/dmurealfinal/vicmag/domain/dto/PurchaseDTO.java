@@ -21,17 +21,17 @@ public class PurchaseDTO {
 
     private String companyId;
 
+    private SubscribeDTO subscribe;
+
+    private SinglePurchaseDTO singlePurchase;
+
+    private PaymentDTO payment;
 
     // for response
     private UserDTO user;
 
     private CompanyDTO company;
 
-    private SinglePurchaseDTO singlePurchase;
-
-    private SubscribeDTO subscribe;
-
-    private PaymentDTO payment;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

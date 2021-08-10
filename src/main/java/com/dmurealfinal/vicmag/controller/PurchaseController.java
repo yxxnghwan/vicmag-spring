@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,22 +25,38 @@ public class PurchaseController {
 
     /** 단건 구매 API */
     @PostMapping("/single")
-    public void postSinglePurchase(HttpServletRequest request, HttpServletResponse response, @RequestBody SinglePurchaseDTO singlePurchaseDTO) throws JsonProcessingException {
+    public boolean postSinglePurchase(HttpServletRequest request, HttpServletResponse response, @RequestBody SinglePurchaseDTO singlePurchaseDTO) throws JsonProcessingException {
         logger.info("[postSinglePurchase] 요청");
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("SinglePurchase : " + objectMapper.writeValueAsString(singlePurchaseDTO));
+
+        if(purchaseService.isSinglePurchased(singlePurchaseDTO.getPurchase().getUserId(), singlePurchaseDTO.getMagazineSeq())) {
+            response.setStatus(HttpStatus.CONFLICT.value());
+            return false;
+        }
+
         singlePurchaseDTO.getPurchase().setPurchaseType("single");
         purchaseService.saveSinglePurchase(singlePurchaseDTO);
+
+        return true;
     }
 
     /** 구독 구매 API */
     @PostMapping("/subscribe")
-    public void postSubscribePurchase(HttpServletRequest request, HttpServletResponse response, @RequestBody SubscribeDTO subscribeDTO) throws JsonProcessingException {
+    public boolean postSubscribePurchase(HttpServletRequest request, HttpServletResponse response, @RequestBody SubscribeDTO subscribeDTO) throws JsonProcessingException {
         logger.info("[postSubscribePurchase] 요청");
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Subscribe : " + objectMapper.writeValueAsString(subscribeDTO));
+
+        if(purchaseService.isSubscribed(subscribeDTO.getPurchase().getUserId(), subscribeDTO.getMagazineBoardSeq(), subscribeDTO.getStartDateTime(), subscribeDTO.getEndDateTime())) {
+            response.setStatus(HttpStatus.CONFLICT.value());
+            return false;
+        }
+
         subscribeDTO.getPurchase().setPurchaseType("subscribe");
         purchaseService.saveSubscribe(subscribeDTO);
+
+        return true;
     }
 
     /** 단건 구매 취소 API */

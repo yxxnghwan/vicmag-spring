@@ -5,6 +5,7 @@ import com.dmurealfinal.vicmag.domain.dto.PaymentDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.Account;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -35,19 +36,15 @@ public class Payment {
     @Column(length = 30, nullable = false)
     private String paymentType;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(columnDefinition = "datetime default now()")
-    private LocalDateTime payDateTime;
-
     public Payment() {}
 
     @Builder
-    public Payment(Long purchaseSeq, Integer totalPrice, String description, String pg, String paymentType, LocalDateTime payDateTime) {
+    public Payment(Long purchaseSeq, Integer totalPrice, String description, String pg, String paymentType) {
         this.purchaseSeq = purchaseSeq;
         this.totalPrice = totalPrice;
         this.description = description;
         this.paymentType = paymentType;
-        this.payDateTime = payDateTime;
+        this.pg = pg;
     }
 
     public PaymentDTO toDTO() {
@@ -57,7 +54,6 @@ public class Payment {
                 .description(this.description)
                 .pg(this.pg)
                 .paymentType(this.paymentType)
-                .payDateTime(this.payDateTime)
                 .build();
     }
 
