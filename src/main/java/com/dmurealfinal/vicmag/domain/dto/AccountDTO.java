@@ -27,6 +27,7 @@ public class AccountDTO {
     // for response
     private UserDTO user;
     private CompanyDTO company;
+    private KakaoAccountDTO kakaoAccountDTO;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)

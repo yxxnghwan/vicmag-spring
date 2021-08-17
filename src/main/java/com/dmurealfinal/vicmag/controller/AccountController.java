@@ -1,10 +1,7 @@
 package com.dmurealfinal.vicmag.controller;
 
 import com.dmurealfinal.vicmag.config.JWTManager;
-import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
-import com.dmurealfinal.vicmag.domain.dto.CompanyDTO;
-import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
-import com.dmurealfinal.vicmag.domain.dto.UserDTO;
+import com.dmurealfinal.vicmag.domain.dto.*;
 import com.dmurealfinal.vicmag.domain.entity.account.*;
 import com.dmurealfinal.vicmag.service.AccountService;
 import com.fasterxml.jackson.core.JsonProcessingException;
