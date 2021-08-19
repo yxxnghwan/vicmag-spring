@@ -18,7 +18,7 @@ public class KakaoAccountDTO {
 
     private String accountId;
 
-    private String kakaoEmail;
+    private Long kakaoId;
 
     private String accessToken;
 
@@ -39,9 +39,9 @@ public class KakaoAccountDTO {
     public KakaoAccountDTO() {}
 
     @Builder
-    public KakaoAccountDTO(String accountId, String kakaoEmail, String accessToken, String refreshToken, LocalDateTime expiresIn, LocalDateTime refreshTokenExpiresIn,AccountDTO account) {
+    public KakaoAccountDTO(String accountId, Long kakaoId, String accessToken, String refreshToken, LocalDateTime expiresIn, LocalDateTime refreshTokenExpiresIn,AccountDTO account) {
         this.accountId = accountId;
-        this.kakaoEmail = kakaoEmail;
+        this.kakaoId = kakaoId;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
@@ -52,7 +52,7 @@ public class KakaoAccountDTO {
     public KaKaoAccount toEntity() {
         return KaKaoAccount.builder()
                 .accountId(this.accountId)
-                .kakaoEmail(this.kakaoEmail)
+                .kakaoId(this.kakaoId)
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .expiresIn(this.expiresIn)

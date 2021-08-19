@@ -22,8 +22,8 @@ public class KaKaoAccount {
     @PrimaryKeyJoinColumn
     private Account account;
 
-    @Column(length = 150, unique = true, nullable = false)
-    private String kakaoEmail;
+    @Column
+    private Long kakaoId;
 
     @Column(length = 200)
     private String accessToken;
@@ -40,9 +40,9 @@ public class KaKaoAccount {
     public KaKaoAccount() {}
 
     @Builder
-    public KaKaoAccount(String accountId, String kakaoEmail, String accessToken, String refreshToken, LocalDateTime expiresIn, LocalDateTime refreshTokenExpiresIn) {
+    public KaKaoAccount(String accountId, Long kakaoId, String accessToken, String refreshToken, LocalDateTime expiresIn, LocalDateTime refreshTokenExpiresIn) {
         this.accountId = accountId;
-        this.kakaoEmail = kakaoEmail;
+        this.kakaoId = kakaoId;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
@@ -52,7 +52,7 @@ public class KaKaoAccount {
     public KakaoAccountDTO toDTO() {
         return KakaoAccountDTO.builder()
                 .accountId(this.accountId)
-                .kakaoEmail(this.kakaoEmail)
+                .kakaoId(this.kakaoId)
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .expiresIn(this.expiresIn)
