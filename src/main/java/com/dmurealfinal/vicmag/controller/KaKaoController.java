@@ -1,10 +1,9 @@
 package com.dmurealfinal.vicmag.controller;
 
-import com.dmurealfinal.vicmag.domain.dto.KakaoAccountDTO;
-import com.dmurealfinal.vicmag.domain.dto.kakao.KakaoAuthCodeReceiveDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +16,21 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/kakao")
 public class KaKaoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Value("${kakaoRestApikey}")
+    private String kakaoRestApiKey;
+    /** 카카오 계정 연결 - 인가코드 받기 */
+    @RequestMapping("/receive/code")
+    public String receiveCode(Model model,
+                              @RequestParam(name = "code", required = false) String code,
+                              @RequestParam(name = "state", required = false) String state,
+                              @RequestParam(name = "error", required = false) String error,
+                              @RequestParam(name = "error_desctiprion", required = false) String error_description) throws JsonProcessingException {
 
-    /** 카카오 계정 연결 */
-    @RequestMapping("/connect")
-    public String connectKakao(Model model, @RequestBody KakaoAuthCodeReceiveDTO kakaoAuthCodeReceiveDTO) throws JsonProcessingException {
-
+        model.addAttribute("code", code);
+        model.addAttribute("state", state);
+        model.addAttribute("error", error);
+        model.addAttribute("error_description", error_description);
+        model.addAttribute("kakaoRestApiKey", kakaoRestApiKey);
         return "kakao/kakao_connect";
     }
 }

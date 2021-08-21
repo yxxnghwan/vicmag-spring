@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>카카오 계정 연결</title>
 
-    <script src="../../static/lib/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 </head>
 <body>
     인가코드를 모델로 받아와서
@@ -12,12 +12,28 @@
     그 값으로 카카오 계정정보 얻기를 카카오 API에 요청하고
     계정정보에서 얻은 서비스 회원 ID를 가지고 DB에 넣는 API에 다시 요청하기
     결과값 반환 후 창 닫기
+
+    ajax끼리 리다이렉트가 되면 rest로 토큰받는 api 개발하고
+    안되면 토큰받는 페이지를 개발하기
 </body>
 
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
     $(document).ready(() => {
 
+        let formData = {
+            grant_type : "authorization_code",
+            redirect_uri : "http://localhost:10089/kakao/receive/token",
+            client_id : [[${kakaoRestApiKey}]],
+            code : [[${code}]]
+        }
+
+        console.log(formData);
+
+
+
     });
+    /*]]*/
 </script>
 
 </html>
