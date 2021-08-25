@@ -18,6 +18,10 @@ public class KaKaoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Value("${kakaoRestApikey}")
     private String kakaoRestApiKey;
+    @Value("${kakaoClientSecret}")
+    private String kakaoClientSecret;
+    @Value("${serverIP}")
+    private String serverIP;
     /** 카카오 계정 연결 - 인가코드 받기 */
     @RequestMapping("/receive/code")
     public String receiveCode(Model model,
@@ -31,6 +35,10 @@ public class KaKaoController {
         model.addAttribute("error", error);
         model.addAttribute("error_description", error_description);
         model.addAttribute("kakaoRestApiKey", kakaoRestApiKey);
+        model.addAttribute("kakaoClientSecret", kakaoClientSecret);
+        String redirectURI = "http://" + serverIP + ":10089/kakao/receive/code";
+        model.addAttribute("redirectURI", redirectURI);
         return "kakao/kakao_connect";
     }
+
 }
