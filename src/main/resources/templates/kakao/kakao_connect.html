@@ -46,18 +46,17 @@
 
             // CORS 발생! 무조건 백엔드에서 요청해야한다고 함
 
-            // $.ajax({
-            //     type: "GET",
-            //     url: "https://kapi.kakao.com/v2/user/me",
-            //     header: {
-            //         'Authorization' : "Bearer " + tokenData.access_token
-            //     },
-            //     error: (error)=> {
-            //         console.log(error);
-            //     }
-            // }).done((accountData)=>{
-            //     console.log(accountData);
-            // })
+            $.ajax({
+                type: "POST",
+                url: "/kakao/receive/token",
+                contentType : "application/json",
+                data: JSON.stringify(tokenData),
+                error: (error)=> {
+                    console.log(error);
+                }
+            }).done((accountData)=>{
+                console.log(accountData);
+            })
         })
 
     });
