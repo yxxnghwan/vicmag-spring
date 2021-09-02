@@ -2,6 +2,7 @@ package com.dmurealfinal.vicmag.service;
 
 import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.CompanyDTO;
+import com.dmurealfinal.vicmag.domain.dto.KakaoAccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.UserDTO;
 import com.dmurealfinal.vicmag.domain.entity.account.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class AccountService {
     UserRepository userRepository;
     @Autowired
     CompanyRepository companyRepository;
+    @Autowired
+    KaKaoAccountRepository kaKaoAccountRepository;
+
 
     /** 전체 계정 조회(테스트) */
     public List<Account> findAccounts() {
@@ -98,5 +102,11 @@ public class AccountService {
     public void deleteCompany(String companyId) {
         companyRepository.deleteById(companyId);
         accountRepository.deleteById(companyId);
+    }
+
+    /** 카카오 계정 연동 */
+    public boolean saveKakaoAccount(KakaoAccountDTO kakaoAccountDTO) {
+        KaKaoAccount kaKaoAccount = kaKaoAccountRepository.save(kakaoAccountDTO.toEntity());
+        return (kaKaoAccount != null);
     }
 }

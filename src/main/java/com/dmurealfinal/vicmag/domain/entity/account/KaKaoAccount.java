@@ -23,7 +23,7 @@ public class KaKaoAccount {
     private Account account;
 
     @Column
-    private Long kakaoId;
+    private Long kakaoIdNumber;
 
     @Column(length = 200)
     private String accessToken;
@@ -37,26 +37,30 @@ public class KaKaoAccount {
     @Column
     private LocalDateTime refreshTokenExpiresIn;
 
+    @Column LocalDateTime connectedAt;
+
     public KaKaoAccount() {}
 
     @Builder
-    public KaKaoAccount(String accountId, Long kakaoId, String accessToken, String refreshToken, LocalDateTime expiresIn, LocalDateTime refreshTokenExpiresIn) {
+    public KaKaoAccount(String accountId, Long kakaoIdNumber, String accessToken, String refreshToken, LocalDateTime expiresIn, LocalDateTime refreshTokenExpiresIn, LocalDateTime connectedAt) {
         this.accountId = accountId;
-        this.kakaoId = kakaoId;
+        this.kakaoIdNumber = kakaoIdNumber;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
         this.refreshTokenExpiresIn = refreshTokenExpiresIn;
+        this.connectedAt = connectedAt;
     }
 
     public KakaoAccountDTO toDTO() {
         return KakaoAccountDTO.builder()
                 .accountId(this.accountId)
-                .kakaoId(this.kakaoId)
+                .kakaoIdNumber(this.kakaoIdNumber)
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .expiresIn(this.expiresIn)
                 .refreshTokenExpiresIn(this.refreshTokenExpiresIn)
+                .connectedAt(this.connectedAt)
                 .build();
     }
 

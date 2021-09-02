@@ -44,7 +44,7 @@
             console.log(tokenData);
             // 계정 정보 얻는 카카오 API 요청하여 서비스 회원 ID 얻기
 
-            // CORS 발생! 무조건 백엔드에서 요청해야한다고 함
+            tokenData.accountId = [[${accountId}]];
 
             $.ajax({
                 type: "POST",

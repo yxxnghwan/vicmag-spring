@@ -18,7 +18,7 @@ public class KakaoAccountDTO {
 
     private String accountId;
 
-    private Long kakaoId;
+    private Long kakaoIdNumber;
 
     private String accessToken;
 
@@ -34,29 +34,36 @@ public class KakaoAccountDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime refreshTokenExpiresIn;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime connectedAt;
+
     private AccountDTO account;
 
     public KakaoAccountDTO() {}
 
     @Builder
-    public KakaoAccountDTO(String accountId, Long kakaoId, String accessToken, String refreshToken, LocalDateTime expiresIn, LocalDateTime refreshTokenExpiresIn,AccountDTO account) {
+    public KakaoAccountDTO(String accountId, Long kakaoIdNumber, String accessToken, String refreshToken, LocalDateTime expiresIn, LocalDateTime refreshTokenExpiresIn, LocalDateTime connectedAt, AccountDTO account) {
         this.accountId = accountId;
-        this.kakaoId = kakaoId;
+        this.kakaoIdNumber = kakaoIdNumber;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.expiresIn = expiresIn;
         this.refreshTokenExpiresIn = refreshTokenExpiresIn;
+        this.connectedAt = connectedAt;
         this.account = account;
     }
 
     public KaKaoAccount toEntity() {
         return KaKaoAccount.builder()
                 .accountId(this.accountId)
-                .kakaoId(this.kakaoId)
+                .kakaoIdNumber(this.kakaoIdNumber)
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .expiresIn(this.expiresIn)
                 .refreshTokenExpiresIn(this.refreshTokenExpiresIn)
+                .connectedAt(this.connectedAt)
                 .build();
 
     }
