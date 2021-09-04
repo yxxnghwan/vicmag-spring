@@ -22,7 +22,7 @@ public class KaKaoAccount {
     @PrimaryKeyJoinColumn
     private Account account;
 
-    @Column
+    @Column(unique = true)
     private Long kakaoIdNumber;
 
     @Column(length = 200)

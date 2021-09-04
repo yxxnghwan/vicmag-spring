@@ -44,21 +44,17 @@
             console.log(tokenData);
             // 계정 정보 얻는 카카오 API 요청하여 서비스 회원 ID 얻기
 
-            tokenData.accountId = [[${accountId}]];
-
             $.ajax({
                 type: "POST",
-                url: "/kakao/receive/token",
+                url: "/kakao/login/jwt",
                 contentType : "application/json",
                 data: JSON.stringify(tokenData),
                 error: (error)=> {
                     console.log(error);
                 }
-            }).done((isConnected)=>{
-                if(isConnected) {
-                    alert("카카오 계정이 연동되었습니다.");
-                } else {
-                    alert("카카오 계정 연동에 실패하였습니다.");
+            }).done((loginInfo)=>{
+                if(loginInfo == null) {
+                    alert("연동된 계정이 존재하지 않습니다.");
                 }
                 window.open('','_self').close();
             })

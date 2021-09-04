@@ -34,12 +34,14 @@ public class AccountController {
 
     /** 로그인 API */
     @PostMapping("/login")
-    public AccountDTO loginAccount(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException{
+    public LoginResponseDTO loginAccount(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException{
         logger.info("[loginAccount 요청]");
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Account : " + objectMapper.writeValueAsString(accountDTO));
 
         AccountDTO find = null;
+
+        LoginResponseDTO result = new LoginResponseDTO();
 
         find = accountService.findAccountById(accountDTO.getAccountId());
         logger.info(objectMapper.writeValueAsString(find));
@@ -50,20 +52,22 @@ public class AccountController {
             if(BCrypt.checkpw(accountDTO.getPassword(), find.getPassword())) {
                 // 비밀번호 정상
                 logger.info("로그인 성공");
-                response.setHeader("Authorization", JWTManager.createJWT(accountDTO));
+                result.setAccount(find);
+                result.setJwt(JWTManager.createJWT(find));
             } else {
                 // 비밀번호 오류
                 logger.info("비밀번호 오류");
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                find = null;
+                result = null;
             }
         } else {
             // 존재하지 않는 계정
             logger.info("계정 없음");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            find = null;
+            result = null;
         }
-        return find;
+
+        return result;
     }
 
     /** 사용자 상세 조회 API */

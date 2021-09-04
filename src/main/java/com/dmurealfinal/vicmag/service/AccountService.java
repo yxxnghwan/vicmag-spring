@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccountService {
@@ -105,8 +106,31 @@ public class AccountService {
     }
 
     /** 카카오 계정 연동 */
+    @Transactional
     public boolean saveKakaoAccount(KakaoAccountDTO kakaoAccountDTO) {
-        KaKaoAccount kaKaoAccount = kaKaoAccountRepository.save(kakaoAccountDTO.toEntity());
-        return (kaKaoAccount != null);
+        KaKaoAccount exist = kaKaoAccountRepository.findByKakaoIdNumber(kakaoAccountDTO.getKakaoIdNumber());
+        if(exist == null) {
+            KaKaoAccount kaKaoAccount = kaKaoAccountRepository.save(kakaoAccountDTO.toEntity());
+            return (kaKaoAccount != null);
+        } else { // 이미 연동된 카카오 계정
+            return false;
+        }
+    }
+
+    /** 카카오 ID Number로 Account 찾기 */
+    @Transactional
+    public AccountDTO findAccountByKakaoIdNumber(Long kakaoIdNumber) {
+        Account account = kaKaoAccountRepository.findAccountByKakaoIdNuber(kakaoIdNumber);
+        if(account == null) {
+            return null;
+        } else {
+            AccountDTO result = account.toDTO();
+            if(account.getAccountType().equals("user")) {
+                result.setUser(account.getUser().toDTO());
+            } else if(account.getAccountType().equals("company")) {
+                result.setCompany(account.getCompany().toDTO());
+            }
+            return result;
+        }
     }
 }
