@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-@Controller
+@RestController
 @RequestMapping("/kakao")
 public class KaKaoController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -48,29 +48,9 @@ public class KaKaoController {
     @Autowired
     AccountService accountService;
 
-    /** 카카오 계정 연결 - 인가코드 받기 */
-    @RequestMapping("/receive/code/{serverEndPoint}")
-    public String receiveCode(Model model,
-                              @RequestParam(name = "code", required = false) String code,
-                              @RequestParam(name = "state", required = false) String state,
-                              @RequestParam(name = "error", required = false) String error,
-                              @RequestParam(name = "error_desctiprion", required = false) String error_description,
-                              @PathVariable(name = "serverEndPoint") String serverEndPoint) throws JsonProcessingException {
-
-        model.addAttribute("code", code);
-        model.addAttribute("accountId", state);
-        model.addAttribute("error", error);
-        model.addAttribute("error_description", error_description);
-        model.addAttribute("kakaoRestApiKey", kakaoRestApiKey);
-        model.addAttribute("kakaoClientSecret", kakaoClientSecret);
-        String redirectURI = "http://" + serverEndPoint + "/kakao/receive/code/" + serverEndPoint;
-        model.addAttribute("redirectURI", redirectURI);
-        return "kakao/kakao_connect";
-    }
-
     /** 카카오 계정 연결 - 토큰 저장 */
-    @PostMapping("/receive/token")
-    public @ResponseBody Boolean receiveToken(@RequestBody Kakao_AccessTokenDTO token) throws JsonProcessingException {
+    @PostMapping("/connect")
+    public Boolean receiveToken(@RequestBody Kakao_AccessTokenDTO token) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("토큰 받기 : " + objectMapper.writeValueAsString(token));
         List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
@@ -114,10 +94,6 @@ public class KaKaoController {
 
         KakaoAccountDTO kakaoAccountDTO = KakaoAccountDTO.builder()
                 .accountId(token.getAccountId())
-                .accessToken(token.getAccess_token())
-                .expiresIn(LocalDateTime.now().plusSeconds(token.getExpires_in()))
-                .refreshToken(token.getRefresh_token())
-                .refreshTokenExpiresIn(LocalDateTime.now().plusSeconds(token.getRefresh_token_expires_in()))
                 .kakaoIdNumber(kakaoIdNumber)
                 .connectedAt(connectedAt)
                 .build();
@@ -125,26 +101,9 @@ public class KaKaoController {
         return accountService.saveKakaoAccount(kakaoAccountDTO);
     }
 
-    @RequestMapping("/login/{serverEndPoint}")
-    public String kakaoLogin(Model model,
-                             @RequestParam(name = "code", required = false) String code,
-                             @RequestParam(name = "state", required = false) String state,
-                             @RequestParam(name = "error", required = false) String error,
-                             @RequestParam(name = "error_desctiprion", required = false) String error_description,
-                             @PathVariable(name = "serverEndPoint") String serverEndPoint) throws JsonProcessingException{
-        model.addAttribute("code", code);
-        model.addAttribute("error", error);
-        model.addAttribute("error_description", error_description);
-        model.addAttribute("kakaoRestApiKey", kakaoRestApiKey);
-        model.addAttribute("kakaoClientSecret", kakaoClientSecret);
-        String redirectURI = "http://" + serverEndPoint + "/kakao/login/" + serverEndPoint;
-        model.addAttribute("redirectURI", redirectURI);
-        return "kakao/kakao_login";
-    }
-
     /** 카카오 로그인 - JWT 반환 */
-    @PostMapping("/login/jwt")
-    public @ResponseBody LoginResponseDTO getJWT(@RequestBody Kakao_AccessTokenDTO token) throws JsonProcessingException {
+    @PostMapping("/login")
+    public LoginResponseDTO getJWT(@RequestBody Kakao_AccessTokenDTO token) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("토큰 받기 : " + objectMapper.writeValueAsString(token));
         List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();

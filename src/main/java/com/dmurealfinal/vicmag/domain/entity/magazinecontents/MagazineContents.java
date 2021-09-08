@@ -31,6 +31,9 @@ public class MagazineContents {
     @Column(length = 300)
     private String description;
 
+    @Column(length = 300)
+    private String contentsThumbnailUrl;
+
     @ManyToOne
     @JoinColumn(name = "magazineSeq")
     private Magazine magazine;
@@ -38,12 +41,13 @@ public class MagazineContents {
     public MagazineContents() {}
 
     @Builder
-    public MagazineContents(Long magazineContentsSeq, Integer page, String contentsType, String contentsUrl, String description, Magazine magazine) {
+    public MagazineContents(Long magazineContentsSeq, Integer page, String contentsType, String contentsUrl, String description, String contentsThumbnailUrl, Magazine magazine) {
         this.magazineContentsSeq = magazineContentsSeq;
         this.page = page;
         this.contentsType = contentsType;
         this.contentsUrl = contentsUrl;
         this.description = description;
+        this.contentsThumbnailUrl = contentsThumbnailUrl;
         this.magazine = magazine;
     }
 
@@ -54,6 +58,7 @@ public class MagazineContents {
                 .contentsType(this.contentsType)
                 .contentsUrl(this.contentsUrl)
                 .description(this.description)
+                .contentsThumbnailUrl(this.contentsThumbnailUrl)
                 .build();
     }
 

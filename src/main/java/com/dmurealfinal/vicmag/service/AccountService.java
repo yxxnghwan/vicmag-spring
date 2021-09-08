@@ -108,7 +108,7 @@ public class AccountService {
     /** 카카오 계정 연동 */
     @Transactional
     public boolean saveKakaoAccount(KakaoAccountDTO kakaoAccountDTO) {
-        KaKaoAccount exist = kaKaoAccountRepository.findByKakaoIdNumber(kakaoAccountDTO.getKakaoIdNumber());
+        KaKaoAccount exist = kaKaoAccountRepository.findByKakaoIdNumberAndAccountId(kakaoAccountDTO.getKakaoIdNumber(), kakaoAccountDTO.getAccountId());
         if(exist == null) {
             KaKaoAccount kaKaoAccount = kaKaoAccountRepository.save(kakaoAccountDTO.toEntity());
             return (kaKaoAccount != null);
@@ -120,7 +120,7 @@ public class AccountService {
     /** 카카오 ID Number로 Account 찾기 */
     @Transactional
     public AccountDTO findAccountByKakaoIdNumber(Long kakaoIdNumber) {
-        Account account = kaKaoAccountRepository.findAccountByKakaoIdNuber(kakaoIdNumber);
+        Account account = kaKaoAccountRepository.findAccountByKakaoIdNumber(kakaoIdNumber);
         if(account == null) {
             return null;
         } else {
