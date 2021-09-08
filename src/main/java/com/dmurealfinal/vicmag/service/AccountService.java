@@ -133,4 +133,10 @@ public class AccountService {
             return result;
         }
     }
+
+    /** 비밀번호 변경 */
+    @Transactional
+    public void updatePassword(AccountDTO accountDTO) {
+        accountRepository.updatePassword(accountDTO.getAccountId(), accountDTO.getPassword());
+    }
 }

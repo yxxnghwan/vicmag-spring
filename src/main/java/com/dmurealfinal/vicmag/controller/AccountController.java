@@ -209,4 +209,30 @@ public class AccountController {
 
         accountService.deleteCompany(companyDTO.getAccountId());
     }
+
+    /** 비밀번호 변경 */
+    @PatchMapping("/password")
+    public void updatePassword(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException {
+        logger.info("[updatePassword 요청]");
+
+        AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
+
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(accountDTO.getAccountId())) {
+                logger.info("삭제하려는 계정정보로 로그인되어있지 않습니다.");
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
+            }
+        }
+
+        accountDTO.setPassword(BCrypt.hashpw(accountDTO.getPassword(), BCrypt.gensalt()));
+
+        accountService.updatePassword(accountDTO);
+    }
 }
