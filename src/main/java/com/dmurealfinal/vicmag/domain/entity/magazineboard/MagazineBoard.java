@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Table(name = "TB_MAGAZINE_BOARD")
@@ -66,10 +67,6 @@ public class MagazineBoard {
     }
 
     public static List<MagazineBoardDTO> toDTOList (List<MagazineBoard> entityList) {
-        List<MagazineBoardDTO> result = new ArrayList<>();
-        for(MagazineBoard entity : entityList) {
-            result.add(entity.toDTO());
-        }
-        return result;
+        return entityList.stream().map(entity->entity.toDTO()).collect(Collectors.toList());
     }
 }

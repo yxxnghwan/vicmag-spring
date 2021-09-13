@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,8 +26,8 @@ public class AccountService {
 
 
     /** 전체 계정 조회(테스트) */
-    public List<Account> findAccounts() {
-        return accountRepository.findAll();
+    public List<AccountDTO> findAccounts() {
+        return Account.toDTOList(accountRepository.findAll());
     }
 
     /** 계정 ID로 조회 */
@@ -51,8 +52,7 @@ public class AccountService {
 
         if(user == null) return null;
 
-        UserDTO result = user.toDTO();
-        return result;
+        return user.toDTO();
     }
 
     /** 잡지사 상세 조회 */
@@ -61,8 +61,7 @@ public class AccountService {
 
         if(company == null) return null;
 
-        CompanyDTO result = company.toDTO();
-        return result;
+        return company.toDTO();
     }
 
     /** 유저 추가 */
@@ -137,6 +136,6 @@ public class AccountService {
     /** 비밀번호 변경 */
     @Transactional
     public void updatePassword(AccountDTO accountDTO) {
-        accountRepository.updatePassword(accountDTO.getAccountId(), accountDTO.getPassword());
+        accountRepository.updatePassword(accountDTO.getAccountId(), accountDTO.getPassword(), LocalDateTime.now());
     }
 }

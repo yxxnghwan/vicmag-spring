@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Table(name = "TB_MAGAZINE")
@@ -69,10 +70,6 @@ public class Magazine extends BaseTimeEntity {
     }
 
     public static List<MagazineDTO> toDTOList (List<Magazine> entityList) {
-        List<MagazineDTO> result = new ArrayList<>();
-        for(Magazine entity : entityList) {
-            result.add(entity.toDTO());
-        }
-        return result;
+        return entityList.stream().map(entity->entity.toDTO()).collect(Collectors.toList());
     }
 }

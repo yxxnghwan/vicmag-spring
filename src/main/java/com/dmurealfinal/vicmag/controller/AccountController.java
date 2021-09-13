@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -27,10 +28,12 @@ public class AccountController {
     @Autowired
     AccountService accountService;
 
-//    @GetMapping
-//    public List<AccountDTO> getAccountList(HttpServletRequest request, HttpServletResponse response) {
-//        return accountService.findAccounts().stream().map(dto -> dto.toDto());
-//    }
+    /** 계정 리스트 */
+    @GetMapping
+    public List<AccountDTO> getAccounts(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("[getAccounts 요청]");
+        return accountService.findAccounts();
+    }
 
     /** 로그인 API */
     @PostMapping("/login")
@@ -82,6 +85,12 @@ public class AccountController {
     public CompanyDTO getCompany(HttpServletRequest request, HttpServletResponse response, @PathVariable String companyId){
         logger.info("[getCompany 요청]");
         return accountService.findCompany(companyId);
+    }
+
+    /** 관리자 추가 API */
+    @PostMapping("/admin")
+    public void postAdmin(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException {
+        /// 여기서부터! AdminDTO 만들 필요가 있을까 고민...
     }
 
     /** 사용자 추가 API */
@@ -138,21 +147,21 @@ public class AccountController {
 
     /** 잡지사 정보 수정 API */
     @PutMapping("/company")
-    public void updateCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException {
+    public void updateCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException, IOException {
         logger.info("[updateCompany 요청]");
 
         AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(),"로그인 계정이 없습니다.");
             return;
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(companyDTO.getAccountId())) {
                 logger.info("수정하려는 계정정보로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "수정하려는 계정정보로 로그인되어있지 않습니다.");
                 return;
             }
         }

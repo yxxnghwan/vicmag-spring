@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Table(name = "TB_PAYMENT")
@@ -58,11 +59,7 @@ public class Payment {
     }
 
     public static List<PaymentDTO> toDTOList (List<Payment> entityList) {
-        List<PaymentDTO> result = new ArrayList<>();
-        for(Payment entity : entityList) {
-            result.add(entity.toDTO());
-        }
-        return result;
+        return entityList.stream().map(entity->entity.toDTO()).collect(Collectors.toList());
     }
 
 

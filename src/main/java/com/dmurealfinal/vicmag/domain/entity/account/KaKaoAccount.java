@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Table(name = "TB_KAKAO_ACCOUNT")
@@ -45,11 +46,6 @@ public class KaKaoAccount {
     }
 
     public static List<KakaoAccountDTO> toDTOList(List<KaKaoAccount> entityList) {
-        List<KakaoAccountDTO> result = new ArrayList<>();
-        for(KaKaoAccount entity : entityList) {
-            result.add(entity.toDTO());
-        }
-
-        return result;
+        return entityList.stream().map(entity->entity.toDTO()).collect(Collectors.toList());
     }
 }

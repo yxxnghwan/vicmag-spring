@@ -8,6 +8,7 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Table(name = "TB_USER")
@@ -50,10 +51,6 @@ public class User {
     }
 
     public static List<UserDTO> toDTOList (List<User> entityList) {
-        List<UserDTO> result = new ArrayList<>();
-        for(User entity : entityList) {
-            result.add(entity.toDTO());
-        }
-        return result;
+        return entityList.stream().map(entity->entity.toDTO()).collect(Collectors.toList());
     }
 }

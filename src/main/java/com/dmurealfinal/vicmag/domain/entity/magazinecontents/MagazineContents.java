@@ -10,6 +10,7 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Table(name = "TB_MAGAZINE_CONTENTS")
@@ -63,10 +64,6 @@ public class MagazineContents {
     }
 
     public static List<MagazineContentsDTO> toDTOList (List<MagazineContents> entityList) {
-        List<MagazineContentsDTO> result = new ArrayList<>();
-        for(MagazineContents entity : entityList) {
-            result.add(entity.toDTO());
-        }
-        return result;
+        return entityList.stream().map(entity->entity.toDTO()).collect(Collectors.toList());
     }
 }

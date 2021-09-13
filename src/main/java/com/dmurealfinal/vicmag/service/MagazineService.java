@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -125,7 +126,7 @@ public class MagazineService {
     /** 잡지 수정 */
     @Transactional
     public void updateMagazine(MagazineDTO magazineDTO) {
-        magazineRepository.updateMagazine(magazineDTO.getMagazineSeq(), magazineDTO.getName(), magazineDTO.getCoverImgUrl(), magazineDTO.getPrice(), magazineDTO.getTag(), magazineDTO.getBgmUrl());
+        magazineRepository.updateMagazine(magazineDTO.getMagazineSeq(), magazineDTO.getName(), magazineDTO.getCoverImgUrl(), magazineDTO.getPrice(), magazineDTO.getTag(), magazineDTO.getBgmUrl(), LocalDateTime.now());
     }
 
     /** 잡지 삭제 */

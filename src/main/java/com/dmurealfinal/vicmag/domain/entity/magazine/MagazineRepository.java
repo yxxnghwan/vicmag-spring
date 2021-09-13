@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MagazineRepository extends JpaRepository<Magazine, Long> {
@@ -17,7 +18,8 @@ public interface MagazineRepository extends JpaRepository<Magazine, Long> {
             "m.coverImgUrl = :coverImgUrl," +
             "m.price = :price," +
             "m.tag = :tag," +
-            "m.bgmUrl = :bgmUrl " +
+            "m.bgmUrl = :bgmUrl ," +
+            "m.modifiedDateTime = :now " +
             "WHERE m.magazineSeq = :magazineSeq")
-    int updateMagazine(@Param("magazineSeq") Long magazineSeq, @Param("name") String name, @Param("coverImgUrl") String coverImgUrl, @Param("price") Integer price, @Param("tag") String tag, @Param("bgmUrl") String bgmUrl);
+    int updateMagazine(@Param("magazineSeq") Long magazineSeq, @Param("name") String name, @Param("coverImgUrl") String coverImgUrl, @Param("price") Integer price, @Param("tag") String tag, @Param("bgmUrl") String bgmUrl, @Param("now") LocalDateTime now);
 }

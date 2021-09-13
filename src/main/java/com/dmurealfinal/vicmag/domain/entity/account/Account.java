@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @Table(name = "TB_ACCOUNT")
@@ -57,10 +59,6 @@ public class Account extends BaseTimeEntity {
     }
 
     public static List<AccountDTO> toDTOList (List<Account> entityList) {
-        List<AccountDTO> result = new ArrayList<>();
-        for(Account entity : entityList) {
-            result.add(entity.toDTO());
-        }
-        return result;
+        return entityList.stream().map(entity->entity.toDTO()).collect(Collectors.toList());
     }
 }

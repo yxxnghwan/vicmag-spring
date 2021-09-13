@@ -14,6 +14,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Table(name = "TB_SUBSCRIBE")
@@ -61,10 +62,6 @@ public class Subscribe {
     }
 
     public static List<SubscribeDTO> toDTOList (List<Subscribe> entityList) {
-        List<SubscribeDTO> result = new ArrayList<>();
-        for(Subscribe entity : entityList) {
-            result.add(entity.toDTO());
-        }
-        return result;
+        return entityList.stream().map(entity->entity.toDTO()).collect(Collectors.toList());
     }
 }
