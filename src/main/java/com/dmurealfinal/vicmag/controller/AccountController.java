@@ -89,8 +89,32 @@ public class AccountController {
 
     /** 관리자 추가 API */
     @PostMapping("/admin")
-    public void postAdmin(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException {
-        /// 여기서부터! AdminDTO 만들 필요가 있을까 고민...
+    public void postAdmin(HttpServletRequest request, HttpServletResponse response, @RequestBody AdminDTO adminDTO) throws JsonProcessingException, IOException {
+        logger.info("[postUser 요청]");
+
+        /*
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
+            return;
+        }
+
+        if(!loginAccount.getAccountType().equals("admin")) {
+            logger.info("관리자 계정만 관리자 추가 API를 요청할 수 있습니다.");
+            response.sendError(HttpStatus.FORBIDDEN.value(), "관리자 계정만 관리자 추가 API를 요청할 수 있습니다.");
+            return;
+        }
+*/
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("Account : " + objectMapper.writeValueAsString(adminDTO));
+        AccountDTO accountDTO = adminDTO.getAccount();
+        accountDTO.setAccountType("admin");
+        accountDTO.setAccountId(adminDTO.getAccountId());
+        accountDTO.setPassword(BCrypt.hashpw(accountDTO.getPassword(), BCrypt.gensalt()));
+
+        // 저장
+        accountService.saveAdmin(accountDTO, adminDTO);
     }
 
     /** 사용자 추가 API */
@@ -100,6 +124,8 @@ public class AccountController {
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("User : " + objectMapper.writeValueAsString(userDTO));
         AccountDTO accountDTO = userDTO.getAccount();
+        accountDTO.setAccountType("user");
+        accountDTO.setAccountId(userDTO.getAccountId());
         accountDTO.setPassword(BCrypt.hashpw(accountDTO.getPassword(), BCrypt.gensalt()));
 
         // 저장
@@ -113,6 +139,8 @@ public class AccountController {
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Company : " + objectMapper.writeValueAsString(companyDTO));
         AccountDTO accountDTO = companyDTO.getAccount();
+        accountDTO.setAccountType("company");
+        accountDTO.setAccountId(companyDTO.getAccountId());
         accountDTO.setPassword(BCrypt.hashpw(accountDTO.getPassword(), BCrypt.gensalt()));
 
         // 저장

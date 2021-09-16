@@ -5,6 +5,7 @@ import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,21 @@ public class JWTFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        String jwt = request.getHeader("Authorization");
+        String authorization = request.getHeader("Authorization");
+        String jwt = null;
+
+
+        if(authorization != null) {
+            String tokenType = authorization.split(" ")[0];
+
+            if(!tokenType.equals("JWT")) {
+                response.sendError(HttpStatus.I_AM_A_TEAPOT.value(), "'JWT ~~~' 형식으로 JWT토큰을 넣어야합니다.");
+                return;
+            }
+
+            jwt = authorization.split(" ")[1];
+        }
+
 
         if(jwt != null) {
             AccountDTO loginAccount = JWTManager.decodeJWT(jwt, response);

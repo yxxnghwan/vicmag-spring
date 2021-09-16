@@ -27,7 +27,8 @@ public class AccountDTO {
     // for response
     private UserDTO user;
     private CompanyDTO company;
-    private KakaoAccountDTO kakaoAccountDTO;
+    private AdminDTO admin;
+    private KakaoAccountDTO kakaoAccount;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -42,12 +43,14 @@ public class AccountDTO {
     public AccountDTO() {}
 
     @Builder
-    public AccountDTO(String accountId, String password, String accountType, UserDTO user, CompanyDTO company, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+    public AccountDTO(String accountId, String password, String accountType, UserDTO user, CompanyDTO company, AdminDTO admin, KakaoAccountDTO kakaoAccount, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.accountId = accountId;
         this.password = password;
         this.accountType = accountType;
         this.user = user;
         this.company = company;
+        this.admin = admin;
+        this.kakaoAccount = kakaoAccount;
         this.createdDateTime = createdDateTime;
         this.modifiedDateTime = modifiedDateTime;
     }

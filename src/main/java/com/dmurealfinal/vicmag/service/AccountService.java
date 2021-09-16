@@ -1,9 +1,6 @@
 package com.dmurealfinal.vicmag.service;
 
-import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
-import com.dmurealfinal.vicmag.domain.dto.CompanyDTO;
-import com.dmurealfinal.vicmag.domain.dto.KakaoAccountDTO;
-import com.dmurealfinal.vicmag.domain.dto.UserDTO;
+import com.dmurealfinal.vicmag.domain.dto.*;
 import com.dmurealfinal.vicmag.domain.entity.account.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +20,8 @@ public class AccountService {
     CompanyRepository companyRepository;
     @Autowired
     KaKaoAccountRepository kaKaoAccountRepository;
+    @Autowired
+    AdminRepository adminRepository;
 
 
     /** 전체 계정 조회(테스트) */
@@ -39,9 +38,15 @@ public class AccountService {
         AccountDTO result = account.toDTO();
         if(account.getAccountType().equals("user")) {
             result.setUser(account.getUser().toDTO());
+            if(account.getKaKaoAccount() != null) {
+                result.setKakaoAccount(account.getKaKaoAccount().toDTO());
+            }
         } else if(account.getAccountType().equals("company")) {
             result.setCompany(account.getCompany().toDTO());
+        } else if(account.getAccountType().equals("admin")) {
+            result.setAdmin(account.getAdmin().toDTO());
         }
+
         return result;
     }
 
@@ -76,6 +81,13 @@ public class AccountService {
     public void saveCompany(AccountDTO accountDTO, CompanyDTO companyDTO) {
         accountRepository.save(accountDTO.toEntity());
         companyRepository.save(companyDTO.toEntity());
+    }
+
+    /** 관리자 추가 */
+    @Transactional
+    public void saveAdmin(AccountDTO accountDTO, AdminDTO adminDTO) {
+        accountRepository.save(accountDTO.toEntity());
+        adminRepository.save(adminDTO.toEntity());
     }
 
     /** 유저 정보 수정 */

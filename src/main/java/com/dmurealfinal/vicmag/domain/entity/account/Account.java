@@ -35,6 +35,9 @@ public class Account extends BaseTimeEntity {
     private User user;
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.REMOVE)
+    private Admin admin;
+
+    @OneToOne(mappedBy = "account", cascade = CascadeType.REMOVE)
     private KaKaoAccount kaKaoAccount;
 
     public Account() {}
