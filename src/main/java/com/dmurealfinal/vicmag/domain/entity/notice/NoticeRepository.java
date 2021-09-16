@@ -10,7 +10,8 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
     @Modifying
     @Query("UPDATE Notice n SET " +
             "n.title = :title, " +
-            "n.contents = :contents " +
+            "n.contents = :contents, " +
+            "n.accountId = :accountId " +
             "WHERE n.noticeSeq = :noticeSeq")
-    int updateNotice(@Param("noticeSeq") Long noticeSeq, @Param("title") String title, @Param("contents") String contents);
+    int updateNotice(@Param("noticeSeq") Long noticeSeq, @Param("title") String title, @Param("contents") String contents, @Param("accountId") String accountId);
 }

@@ -37,7 +37,7 @@ public class NoticeService {
     /** 공지사항 수정 */
     @Transactional
     public void updateNotice(NoticeDTO noticeDTO) {
-        noticeRepository.updateNotice(noticeDTO.getNoticeSeq(), noticeDTO.getTitle(), noticeDTO.getContents());
+        noticeRepository.updateNotice(noticeDTO.getNoticeSeq(), noticeDTO.getTitle(), noticeDTO.getContents(), noticeDTO.getAccountId());
     }
 
     /** 공지사항 삭제 */

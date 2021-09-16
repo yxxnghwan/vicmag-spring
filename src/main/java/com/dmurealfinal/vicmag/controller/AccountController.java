@@ -37,7 +37,7 @@ public class AccountController {
 
     /** 로그인 API */
     @PostMapping("/login")
-    public LoginResponseDTO loginAccount(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException{
+    public LoginResponseDTO loginAccount(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException, IOException {
         logger.info("[loginAccount 요청]");
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Account : " + objectMapper.writeValueAsString(accountDTO));
@@ -60,13 +60,13 @@ public class AccountController {
             } else {
                 // 비밀번호 오류
                 logger.info("비밀번호 오류");
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), "비밀번호 오류");
                 result = null;
             }
         } else {
             // 존재하지 않는 계정
             logger.info("계정 없음");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "계정 없음");
             result = null;
         }
 
@@ -92,7 +92,7 @@ public class AccountController {
     public void postAdmin(HttpServletRequest request, HttpServletResponse response, @RequestBody AdminDTO adminDTO) throws JsonProcessingException, IOException {
         logger.info("[postUser 요청]");
 
-        /*
+
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
@@ -105,7 +105,8 @@ public class AccountController {
             response.sendError(HttpStatus.FORBIDDEN.value(), "관리자 계정만 관리자 추가 API를 요청할 수 있습니다.");
             return;
         }
-*/
+
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("Account : " + objectMapper.writeValueAsString(adminDTO));
         AccountDTO accountDTO = adminDTO.getAccount();
@@ -149,21 +150,21 @@ public class AccountController {
 
     /** 사용자 정보 수정 API */
     @PutMapping("/user")
-    public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
+    public void updateUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException, IOException {
         logger.info("[updateUser 요청]");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(userDTO.getAccountId())) {
                 logger.info("수정하려는 계정정보로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "수정하려는 계정정보로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -201,21 +202,21 @@ public class AccountController {
 
     /** 사용자 삭제 API */
     @DeleteMapping("/user")
-    public void deleteUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException {
+    public void deleteUser(HttpServletRequest request, HttpServletResponse response, @RequestBody UserDTO userDTO) throws JsonProcessingException, IOException {
         logger.info("[deleteUser 요청]");
 
         AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(userDTO.getAccountId())) {
                 logger.info("삭제하려는 계정정보로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "삭제하려는 계정정보로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -225,21 +226,21 @@ public class AccountController {
 
     /** 잡지사 삭제 API */
     @DeleteMapping("/company")
-    public void deleteCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException {
+    public void deleteCompany(HttpServletRequest request, HttpServletResponse response, @RequestBody CompanyDTO companyDTO) throws JsonProcessingException, IOException {
         logger.info("[deleteCompany 요청]");
 
         AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(companyDTO.getAccountId())) {
                 logger.info("삭제하려는 계정정보로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "삭제하려는 계정정보로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -249,21 +250,21 @@ public class AccountController {
 
     /** 비밀번호 변경 */
     @PatchMapping("/password")
-    public void updatePassword(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException {
+    public void updatePassword(HttpServletRequest request, HttpServletResponse response, @RequestBody AccountDTO accountDTO) throws JsonProcessingException, IOException {
         logger.info("[updatePassword 요청]");
 
         AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(accountDTO.getAccountId())) {
-                logger.info("삭제하려는 계정정보로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                logger.info("수정하려는 계정정보로 로그인되어있지 않습니다.");
+                response.sendError(HttpStatus.FORBIDDEN.value(), "수정하려는 계정정보로 로그인되어있지 않습니다.");
                 return;
             }
         }

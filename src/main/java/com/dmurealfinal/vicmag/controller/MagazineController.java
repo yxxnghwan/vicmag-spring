@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,21 +57,21 @@ public class MagazineController {
 
     /** 잡지 보드 등록 API */
     @PostMapping("/boards")
-    public void postBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException {
+    public void postBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException, IOException {
         logger.info("[postBoard] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(magazineBoardDTO.getCompany().getAccountId())) {
                 logger.info("등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -82,14 +83,14 @@ public class MagazineController {
 
     /** 잡지 등록 API */
     @PostMapping("/magazines")
-    public void postMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException{
+    public void postMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException, IOException{
         logger.info("[postMagazine] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
@@ -97,7 +98,7 @@ public class MagazineController {
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(magazineBoardDTO.getCompany().getAccountId())) {
                 logger.info("등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -109,14 +110,14 @@ public class MagazineController {
 
     /** 잡지 컨텐츠 등록 API */
     @PostMapping("/contents")
-    public void postMagazineContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException{
+    public void postMagazineContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException, IOException{
         logger.info("[postMagazineContents] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
@@ -124,7 +125,7 @@ public class MagazineController {
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(magazineDTO.getBoard().getCompany().getAccountId())) {
                 logger.info("등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -137,14 +138,14 @@ public class MagazineController {
 
     /** 잡지 보드 수정 API */
     @PutMapping("/boards")
-    public void updateBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException {
+    public void updateBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException, IOException {
         logger.info("[updateBoard] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
@@ -152,7 +153,7 @@ public class MagazineController {
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(oldObject.getCompany().getAccountId())) {
                 logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "삭제하려는 잡지사계정으로 로그인되어있지 않습니다." );
                 return;
             }
         }
@@ -165,14 +166,14 @@ public class MagazineController {
 
     /** 잡지 보드 삭제 API */
     @DeleteMapping("/boards")
-    public void deleteBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException {
+    public void deleteBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineBoardDTO magazineBoardDTO) throws JsonProcessingException, IOException {
         logger.info("[deleteBoard] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
@@ -180,7 +181,7 @@ public class MagazineController {
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(oldObject.getCompany().getAccountId())) {
                 logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "삭제하려는 잡지사계정으로 로그인되어있지 않습니다." );
                 return;
             }
         }
@@ -190,14 +191,14 @@ public class MagazineController {
 
     /** 잡지 수정 API */
     @PutMapping("/magazines")
-    public void updateMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException {
+    public void updateMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException, IOException {
         logger.info("[updateMagazine] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
@@ -205,7 +206,7 @@ public class MagazineController {
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(oldObject.getBoard().getCompany().getAccountId())) {
                 logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -218,14 +219,14 @@ public class MagazineController {
 
     /** 잡지 삭제 API */
     @DeleteMapping("/magazines")
-    public void deleteMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException {
+    public void deleteMagazine(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineDTO magazineDTO) throws JsonProcessingException, IOException {
         logger.info("[deleteMagazine] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
@@ -233,7 +234,7 @@ public class MagazineController {
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(oldObject.getBoard().getCompany().getAccountId())) {
                 logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -245,14 +246,14 @@ public class MagazineController {
 
     /** 잡지 컨텐츠 수정 */
     @PutMapping("/contents")
-    public void updateContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException {
+    public void updateContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException, IOException {
         logger.info("[updateContents] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
@@ -260,7 +261,7 @@ public class MagazineController {
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(oldObject.getMagazine().getBoard().getCompany().getAccountId())) {
                 logger.info("수정하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "수정하려는 잡지사계정으로 로그인되어있지 않습니다.");
                 return;
             }
         }
@@ -273,14 +274,14 @@ public class MagazineController {
 
     /** 잡지 컨텐츠 삭제 API */
     @DeleteMapping("/contents")
-    public void deleteContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException {
+    public void deleteContents(HttpServletRequest request, HttpServletResponse response, @RequestBody MagazineContentsDTO magazineContentsDTO) throws JsonProcessingException, IOException {
         logger.info("[deleteContents] 요청");
 
         AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
 
         if(loginAccount == null) {
             logger.info("로그인 계정이 없습니다.");
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
             return;
         }
 
@@ -288,7 +289,7 @@ public class MagazineController {
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(magazineDTO.getBoard().getCompany().getAccountId())) {
                 logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
-                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.sendError(HttpStatus.FORBIDDEN.value(), "삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
                 return;
             }
         }

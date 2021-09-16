@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.domain.dto;
 
+import com.dmurealfinal.vicmag.domain.entity.faq.Faq;
 import com.dmurealfinal.vicmag.domain.entity.notice.Notice;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -12,12 +13,14 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class NoticeDTO {
-    private Long noticeSeq;
+public class FaqDTO {
+    private Long faqSeq;
 
     private String title;
 
-    private String contents;
+    private String question;
+
+    private String answer;
 
     private String accountId;
 
@@ -31,23 +34,25 @@ public class NoticeDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime modifiedDateTime;
 
-    public NoticeDTO() {}
+    public FaqDTO() {}
 
     @Builder
-    public NoticeDTO(Long noticeSeq, String title, String contents, String accountId, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
-        this.noticeSeq = noticeSeq;
+    public FaqDTO(Long faqSeq, String title, String question, String answer, String accountId, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+        this.faqSeq = faqSeq;
         this.title = title;
-        this.contents = contents;
+        this.question = question;
+        this.answer = answer;
         this.accountId = accountId;
         this.createdDateTime = createdDateTime;
         this.modifiedDateTime = modifiedDateTime;
     }
 
-    public Notice toEntity() {
-        return Notice.builder()
-                .noticeSeq(this.noticeSeq)
+    public Faq toEntity() {
+        return Faq.builder()
+                .faqSeq(this.faqSeq)
                 .title(this.title)
-                .contents(this.contents)
+                .question(this.question)
+                .answer(this.answer)
                 .accountId(this.accountId)
                 .build();
     }

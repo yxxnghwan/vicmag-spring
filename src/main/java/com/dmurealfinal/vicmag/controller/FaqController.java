@@ -1,8 +1,9 @@
 package com.dmurealfinal.vicmag.controller;
 
 import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
+import com.dmurealfinal.vicmag.domain.dto.FaqDTO;
 import com.dmurealfinal.vicmag.domain.dto.NoticeDTO;
-import com.dmurealfinal.vicmag.service.NoticeService;
+import com.dmurealfinal.vicmag.service.FaqService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -18,29 +19,31 @@ import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/notices")
-public class NoticeController {
+@RequestMapping("/api/faqs")
+public class FaqController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    NoticeService noticeService;
+    FaqService faqService;
 
-    /** 공지사항 전체 조회 */
+    /** FAQ 전체 조회 */
     @GetMapping
-    public List<NoticeDTO> getNotices(HttpServletRequest request, HttpServletResponse response) {
-        logger.info("[getNotices 요청]");
-        return noticeService.findNotices();
+    public List<FaqDTO> getFaqs(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("[getFaqs 요청]");
+        return faqService.findFaqs();
     }
 
-    @GetMapping("/{noticeSeq}")
-    public NoticeDTO getNotice(HttpServletRequest request, HttpServletResponse response, @PathVariable Long noticeSeq) {
-        logger.info("[getNotice 요청]");
-        return noticeService.findNoticeById(noticeSeq);
+    /** FAQ 상세 조회 */
+    @GetMapping("/{faqSeq}")
+    public FaqDTO getFaq(HttpServletRequest request, HttpServletResponse response, @PathVariable Long faqSeq) {
+        logger.info("[getFaq 요청]");
+        return faqService.findFaqById(faqSeq);
     }
 
+    /** FAQ 등록 */
     @PostMapping
-    public void postNotice(HttpServletRequest request, HttpServletResponse response, @RequestBody NoticeDTO noticeDTO) throws JsonProcessingException, IOException {
-        logger.info("[postNotice 요청]");
+    public void postFaq(HttpServletRequest request, HttpServletResponse response, @RequestBody FaqDTO faqDTO) throws JsonProcessingException, IOException {
+        logger.info("[postFaq 요청]");
 
         AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
 
@@ -51,22 +54,24 @@ public class NoticeController {
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
-            logger.info("관리자만 공지사항을 등록할 수 있습니다.");
+            logger.info("관리자만 FAQ를 등록할 수 있습니다.");
             response.sendError(HttpStatus.FORBIDDEN.value(), "관리자만 공지사항을 등록할 수 있습니다.");
             return;
         }
 
-        noticeDTO.setAccountId(loginAccount.getAccountId());
+        faqDTO.setAccountId(loginAccount.getAccountId());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        logger.info("Notice : " + objectMapper.writeValueAsString(noticeDTO));
+        logger.info("FAQ : " + objectMapper.writeValueAsString(faqDTO));
 
-        noticeService.saveNotice(noticeDTO);
+        faqService.saveFaq(faqDTO);
     }
 
+
+    /** FAQ 수정 */
     @PutMapping
-    public void updateNotice(HttpServletRequest request, HttpServletResponse response, @RequestBody NoticeDTO noticeDTO) throws JsonProcessingException, IOException {
-        logger.info("[updateNotice 요청]");
+    public void updateFaq(HttpServletRequest request, HttpServletResponse response, @RequestBody FaqDTO faqDTO) throws JsonProcessingException, IOException {
+        logger.info("[updateFaq 요청]");
 
         AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
 
@@ -77,21 +82,22 @@ public class NoticeController {
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
-            logger.info("관리자만 공지사항을 수정할 수 있습니다.");
-            response.sendError(HttpStatus.FORBIDDEN.value(), "관리자만 공지사항을 수정할 수 있습니다.");
+            logger.info("관리자만 FAQ를 수정할 수 있습니다.");
+            response.sendError(HttpStatus.FORBIDDEN.value(), "관리자만 FAQ를 수정할 수 있습니다.");
             return;
         }
 
-        noticeDTO.setAccountId(loginAccount.getAccountId());
+        faqDTO.setAccountId(loginAccount.getAccountId());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        logger.info("Notice : " + objectMapper.writeValueAsString(noticeDTO));
+        logger.info("FAQ : " + objectMapper.writeValueAsString(faqDTO));
 
-        noticeService.updateNotice(noticeDTO);
+        faqService.updateFaq(faqDTO);
     }
 
+    /** FAQ 삭제 */
     @DeleteMapping
-    public void deleteNotice(HttpServletRequest request, HttpServletResponse response, @RequestBody NoticeDTO noticeDTO) throws JsonProcessingException, IOException {
+    public void deleteFaq(HttpServletRequest request, HttpServletResponse response, @RequestBody FaqDTO faqDTO) throws JsonProcessingException, IOException {
         logger.info("[deleteNotice 요청]");
 
         AccountDTO loginAccount = (AccountDTO) request.getAttribute("loginAccount");
@@ -103,14 +109,14 @@ public class NoticeController {
         }
 
         if(!loginAccount.getAccountType().equals("admin")) {
-            logger.info("관리자만 공지사항을 삭제할 수 있습니다.");
-            response.sendError(HttpStatus.FORBIDDEN.value(), "관리자만 공지사항을 삭제할 수 있습니다.");
+            logger.info("관리자만 FAQ를 삭제할 수 있습니다.");
+            response.sendError(HttpStatus.FORBIDDEN.value(), "관리자만 FAQ를 삭제할 수 있습니다.");
             return;
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        logger.info("Notice : " + objectMapper.writeValueAsString(noticeDTO));
+        logger.info("FAQ : " + objectMapper.writeValueAsString(faqDTO));
 
-        noticeService.deleteNotice(noticeDTO.getNoticeSeq());
+        faqService.deleteFaq(faqDTO.getFaqSeq());
     }
 }
