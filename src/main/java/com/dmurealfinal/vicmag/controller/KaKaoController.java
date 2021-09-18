@@ -4,7 +4,7 @@ import com.dmurealfinal.vicmag.config.JWTManager;
 import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.KakaoAccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.LoginResponseDTO;
-import com.dmurealfinal.vicmag.domain.dto.kakao.Kakao_AccessTokenDTO;
+import com.dmurealfinal.vicmag.domain.dto.kakao.Kakao_CodeDTO;
 import com.dmurealfinal.vicmag.service.AccountService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,20 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.SimpleDateFormat;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -50,19 +49,40 @@ public class KaKaoController {
 
     /** 카카오 계정 연결 - 토큰 저장 */
     @PostMapping("/connect")
-    public Boolean receiveToken(@RequestBody Kakao_AccessTokenDTO token) throws JsonProcessingException {
+    public Boolean receiveToken(HttpServletRequest request, HttpServletResponse response, @RequestBody Kakao_CodeDTO codeDTO) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        logger.info("토큰 받기 : " + objectMapper.writeValueAsString(token));
+        logger.info("토큰 받기 : " + objectMapper.writeValueAsString(codeDTO));
         List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
         converters.add(new FormHttpMessageConverter());
         converters.add(new StringHttpMessageConverter());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add("Authorization", "Bearer " + token.getAccess_token());
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setMessageConverters(converters);
+        String tokenUrl = "https://kauth.kakao.com/oauth/token";
+
+        MultiValueMap<String, String> tokenBody = new LinkedMultiValueMap<>();
+        tokenBody.add("grant_type", "authorization_code");
+        tokenBody.add("client_id", kakaoRestApiKey);
+        String origin = request.getHeader("Origin");
+        String redirect_uri = origin + "/oauth/kakao/connect";
+        logger.info(redirect_uri);
+        tokenBody.add("redirect_uri", redirect_uri);
+        tokenBody.add("code", codeDTO.getCode());
+
+        HttpEntity<MultiValueMap<String, String>> tokenEntity = new HttpEntity<>(tokenBody, headers);
+
+        String tokenJsonData = restTemplate.postForObject(tokenUrl, tokenEntity, String.class);
+
+        String token = objectMapper.readValue(tokenJsonData, new TypeReference<Map<String, Object>>() {}).get("access_token").toString();
+
+
+        headers.add("Authorization", "Bearer " + token);
+
         String url = "https://kapi.kakao.com/v2/user/me";
+
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, headers);
 
         String jsonData = restTemplate.postForObject(url, entity, String.class);
@@ -93,7 +113,7 @@ public class KaKaoController {
 //                .bodyToMono(String.class);
 
         KakaoAccountDTO kakaoAccountDTO = KakaoAccountDTO.builder()
-                .accountId(token.getAccountId())
+                .accountId(codeDTO.getAccountId())
                 .kakaoIdNumber(kakaoIdNumber)
                 .connectedAt(connectedAt)
                 .build();
@@ -103,19 +123,39 @@ public class KaKaoController {
 
     /** 카카오 로그인 - JWT 반환 */
     @PostMapping("/login")
-    public LoginResponseDTO getJWT(@RequestBody Kakao_AccessTokenDTO token) throws JsonProcessingException {
+    public LoginResponseDTO getJWT(HttpServletRequest request, HttpServletResponse response, @RequestBody Kakao_CodeDTO codeDTO) throws JsonProcessingException, HttpClientErrorException {
         ObjectMapper objectMapper = new ObjectMapper();
-        logger.info("토큰 받기 : " + objectMapper.writeValueAsString(token));
+        logger.info("토큰 받기 : " + objectMapper.writeValueAsString(codeDTO));
         List<HttpMessageConverter<?>> converters = new ArrayList<HttpMessageConverter<?>>();
         converters.add(new FormHttpMessageConverter());
         converters.add(new StringHttpMessageConverter());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add("Authorization", "Bearer " + token.getAccess_token());
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setMessageConverters(converters);
+        String tokenUrl = "https://kauth.kakao.com/oauth/token";
+
+        MultiValueMap<String, String> tokenBody = new LinkedMultiValueMap<>();
+        tokenBody.add("grant_type", "authorization_code");
+        tokenBody.add("client_id", kakaoRestApiKey);
+        String origin = request.getHeader("Origin");
+        String redirect_uri = origin + "/oauth/kakao/login";
+        tokenBody.add("redirect_uri", redirect_uri);
+        tokenBody.add("code", codeDTO.getCode());
+
+        HttpEntity<MultiValueMap<String, String>> tokenEntity = new HttpEntity<>(tokenBody, headers);
+
+        String tokenJsonData = restTemplate.postForObject(tokenUrl, tokenEntity, String.class);
+
+        String token = objectMapper.readValue(tokenJsonData, new TypeReference<Map<String, Object>>() {}).get("access_token").toString();
+
+
+        headers.add("Authorization", "Bearer " + token);
+
         String url = "https://kapi.kakao.com/v2/user/me";
+
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(body, headers);
 
         String jsonData = restTemplate.postForObject(url, entity, String.class);

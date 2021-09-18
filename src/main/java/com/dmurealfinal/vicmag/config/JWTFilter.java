@@ -37,7 +37,6 @@ public class JWTFilter implements Filter {
         String authorization = request.getHeader("Authorization");
         String jwt = null;
 
-
         if(authorization != null) {
             String tokenType = authorization.split(" ")[0];
 
