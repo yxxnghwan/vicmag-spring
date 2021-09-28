@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @Component
 public class JWTFilter implements Filter {
@@ -38,14 +39,15 @@ public class JWTFilter implements Filter {
         String jwt = null;
 
         if(authorization != null) {
-            String tokenType = authorization.split(" ")[0];
-
+            authorization = authorization.trim();
+            String tokenType = authorization.split("\\s+")[0];
             if(!tokenType.equals("JWT")) {
+                System.out.println("여기 걸림");
                 response.sendError(HttpStatus.I_AM_A_TEAPOT.value(), "'JWT ~~~' 형식으로 JWT토큰을 넣어야합니다.");
                 return;
             }
 
-            jwt = authorization.split(" ")[1];
+            jwt = authorization.split("\\s+")[1];
         }
 
 
