@@ -1,9 +1,6 @@
 package com.dmurealfinal.vicmag.service;
 
-import com.dmurealfinal.vicmag.domain.dto.MagazineBoardDTO;
-import com.dmurealfinal.vicmag.domain.dto.MagazineContentsDTO;
-import com.dmurealfinal.vicmag.domain.dto.MagazineDTO;
-import com.dmurealfinal.vicmag.domain.dto.MagazineViewDTO;
+import com.dmurealfinal.vicmag.domain.dto.*;
 import com.dmurealfinal.vicmag.domain.entity.account.CompanyRepository;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import com.dmurealfinal.vicmag.domain.entity.magazine.MagazineRepository;
@@ -14,6 +11,8 @@ import com.dmurealfinal.vicmag.domain.entity.magazinecontents.MagazineContentsRe
 import com.dmurealfinal.vicmag.domain.entity.magazineview.MagazineView;
 import com.dmurealfinal.vicmag.domain.entity.magazineview.MagazineViewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -147,12 +146,28 @@ public class MagazineService {
         magazineContentsRepository.deleteById(magazineContentsSeq);
     }
 
-    /** 잡지 조회수 증가 API */
+    /** 잡지 조회수 증가 */
     @Transactional
     public void saveMagazineView(MagazineViewDTO magazineViewDTO) {
         if(magazineViewRepository.existsView(magazineViewDTO.getUserId(), magazineViewDTO.getMagazineSeq()) == null) {
             MagazineView magazineView = magazineViewDTO.toEntity();
             magazineViewRepository.save(magazineView);
         }
+    }
+
+    /** 검색 */
+    @Transactional
+    public SearchResultDTO search(SearchDTO searchDTO) {
+        SearchResultDTO result = new SearchResultDTO();
+
+        Pageable boardPageable = PageRequest.of(searchDTO.getBoardPage() - 1, searchDTO.getBoardSize());
+        List<MagazineBoard> magazineBoardList = magazineBoardRepository.search(searchDTO.getSearchText(), searchDTO.getCategory(), boardPageable);
+        result.setMagazineBoards(MagazineBoard.toDTOList(magazineBoardList));
+
+        Pageable magazinePageable = PageRequest.of(searchDTO.getMagazinePage() - 1, searchDTO.getMagazineSize());
+        List<Magazine> magazineList = magazineRepository.search(searchDTO.getSearchText(), searchDTO.getCategory(), magazinePageable);
+        result.setMagazines(Magazine.toDTOList(magazineList));
+
+        return result;
     }
 }

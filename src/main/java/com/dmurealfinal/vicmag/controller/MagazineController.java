@@ -307,4 +307,14 @@ public class MagazineController {
 
         magazineService.saveMagazineView(magazineViewDTO);
     }
+
+    /** 검색 API */
+    @GetMapping("/search")
+    public SearchResultDTO search(HttpServletRequest request, HttpServletResponse response, @RequestBody SearchDTO searchDTO) throws JsonProcessingException {
+        logger.info("[search] 요청");
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("searchDTO : " + objectMapper.writeValueAsString(searchDTO));
+
+        return magazineService.search(searchDTO);
+    }
 }
