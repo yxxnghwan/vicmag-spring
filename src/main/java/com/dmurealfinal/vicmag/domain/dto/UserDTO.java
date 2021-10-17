@@ -17,15 +17,18 @@ public class UserDTO {
 
     private String email;
 
+    private KakaoAccountDTO kakaoAccount;
+
     public UserDTO() {}
 
     @Builder
-    public UserDTO(String accountId, AccountDTO account, String name, String phone, String email) {
+    public UserDTO(String accountId, AccountDTO account, String name, String phone, String email, KakaoAccountDTO kakaoAccount) {
         this.accountId = accountId;
         this.account = account;
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.kakaoAccount = kakaoAccount;
     }
 
     public User toEntity() {

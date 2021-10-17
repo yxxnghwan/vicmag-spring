@@ -25,16 +25,19 @@ public class CompanyDTO {
     // for response
     private AccountDTO account;
 
+    private KakaoAccountDTO kakaoAccount;
+
     public CompanyDTO() {}
 
     @Builder
-    public CompanyDTO(String accountId, String companyRegistrationNumber, String name, String phone, String email, AccountDTO account) {
+    public CompanyDTO(String accountId, String companyRegistrationNumber, String name, String phone, String email, AccountDTO account, KakaoAccountDTO kakaoAccount) {
         this.accountId = accountId;
         this.companyRegistrationNumber = companyRegistrationNumber;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.account = account;
+        this.kakaoAccount = kakaoAccount;
     }
 
     public Company toEntity() {

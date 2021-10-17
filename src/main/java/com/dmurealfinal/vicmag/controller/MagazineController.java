@@ -309,7 +309,7 @@ public class MagazineController {
     }
 
     /** 검색 API */
-    @GetMapping("/search")
+    @PostMapping("/search")
     public SearchResultDTO search(HttpServletRequest request, HttpServletResponse response, @RequestBody SearchDTO searchDTO) throws JsonProcessingException {
         logger.info("[search] 요청");
         ObjectMapper objectMapper = new ObjectMapper();

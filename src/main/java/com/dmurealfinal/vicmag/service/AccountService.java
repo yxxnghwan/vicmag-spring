@@ -57,7 +57,14 @@ public class AccountService {
 
         if(user == null) return null;
 
-        return user.toDTO();
+        UserDTO result = user.toDTO();
+        Optional<KaKaoAccount> kaKaoAccount = kaKaoAccountRepository.findById(userId);
+
+        if(!kaKaoAccount.isEmpty()) {
+            result.setKakaoAccount(kaKaoAccount.get().toDTO());
+        }
+
+        return result;
     }
 
     /** 잡지사 상세 조회 */
@@ -65,6 +72,13 @@ public class AccountService {
         Company company = companyRepository.findByCompanyId(companyId);
 
         if(company == null) return null;
+
+        CompanyDTO result = company.toDTO();
+        Optional<KaKaoAccount> kaKaoAccount = kaKaoAccountRepository.findById(companyId);
+
+        if(!kaKaoAccount.isEmpty()) {
+            result.setKakaoAccount(kaKaoAccount.get().toDTO());
+        }
 
         return company.toDTO();
     }
