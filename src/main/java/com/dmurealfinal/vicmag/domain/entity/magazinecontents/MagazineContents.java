@@ -35,6 +35,9 @@ public class MagazineContents {
     @Column(length = 300)
     private String contentsThumbnailUrl;
 
+    @Column(columnDefinition = "TINYINT")
+    private Integer uploadStatus;
+
     @ManyToOne
     @JoinColumn(name = "magazineSeq")
     private Magazine magazine;
@@ -42,13 +45,14 @@ public class MagazineContents {
     public MagazineContents() {}
 
     @Builder
-    public MagazineContents(Long magazineContentsSeq, Integer page, String contentsType, String contentsUrl, String description, String contentsThumbnailUrl, Magazine magazine) {
+    public MagazineContents(Long magazineContentsSeq, Integer page, String contentsType, String contentsUrl, String description, String contentsThumbnailUrl, Integer uploadStatus,Magazine magazine) {
         this.magazineContentsSeq = magazineContentsSeq;
         this.page = page;
         this.contentsType = contentsType;
         this.contentsUrl = contentsUrl;
         this.description = description;
         this.contentsThumbnailUrl = contentsThumbnailUrl;
+        this.uploadStatus = uploadStatus;
         this.magazine = magazine;
     }
 
@@ -60,6 +64,7 @@ public class MagazineContents {
                 .contentsUrl(this.contentsUrl)
                 .description(this.description)
                 .contentsThumbnailUrl(this.contentsThumbnailUrl)
+                .uploadStatus(this.uploadStatus)
                 .build();
     }
 

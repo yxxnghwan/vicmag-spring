@@ -2,6 +2,8 @@ package com.dmurealfinal.vicmag.service;
 
 import com.dmurealfinal.vicmag.domain.dto.*;
 import com.dmurealfinal.vicmag.domain.entity.account.CompanyRepository;
+import com.dmurealfinal.vicmag.domain.entity.contentsText.ContentsText;
+import com.dmurealfinal.vicmag.domain.entity.contentsText.ContentsTextRepository;
 import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
 import com.dmurealfinal.vicmag.domain.entity.magazine.MagazineRepository;
 import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
@@ -35,6 +37,9 @@ public class MagazineService {
 
     @Autowired
     MagazineViewRepository magazineViewRepository;
+
+    @Autowired
+    ContentsTextRepository contentsTextRepository;
 
     /** 잡지 보드 추가 */
     @Transactional
@@ -137,7 +142,7 @@ public class MagazineService {
     /** 컨텐츠 수정 */
     @Transactional
     public void updateMagazineContents(MagazineContentsDTO magazineContentsDTO) {
-        magazineContentsRepository.updateMagazineContents(magazineContentsDTO.getMagazineContentsSeq(), magazineContentsDTO.getPage(), magazineContentsDTO.getContentsType(), magazineContentsDTO.getContentsUrl(), magazineContentsDTO.getDescription());
+        magazineContentsRepository.updateMagazineContents(magazineContentsDTO.getMagazineContentsSeq(), magazineContentsDTO.getPage(), magazineContentsDTO.getContentsType(), magazineContentsDTO.getContentsUrl(), magazineContentsDTO.getDescription(), magazineContentsDTO.getUploadStatus());
     }
 
     /** 컨텐츠 삭제 */
@@ -169,5 +174,17 @@ public class MagazineService {
         result.setMagazines(Magazine.toDTOList(magazineList));
 
         return result;
+    }
+
+    /** 컨텐츠 텍스트 조회 */
+    @Transactional
+    public List<ContentsTextDTO> findContentsText(Long magazineContentsSeq) {
+        return ContentsText.toDTOList(contentsTextRepository.findByMagazineContentsSeq(magazineContentsSeq));
+    }
+
+    /** 컨텐츠 텍스트 등록 */
+    public void saveContentsText(ContentsTextDTO contentsTextDTO) {
+        ContentsText contentsText = contentsTextDTO.toEntity();
+        contentsTextRepository.save(contentsText);
     }
 }

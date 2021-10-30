@@ -16,7 +16,8 @@ public interface MagazineContentsRepository extends JpaRepository<MagazineConten
             "mc.page = :page, " +
             "mc.contentsType = :contentsType, " +
             "mc.contentsUrl = :contentsUrl, " +
-            "mc.description = :description " +
+            "mc.description = :description, " +
+            "mc.uploadStatus = :uploadStatus " +
             "WHERE mc.magazineContentsSeq = :magazineContentsSeq")
-    int updateMagazineContents(@Param("magazineContentsSeq") Long magazineContentsSeq, @Param("page") Integer page, @Param("contentsType") String contentsType, @Param("contentsUrl") String contentsUrl, @Param("description") String description);
+    int updateMagazineContents(@Param("magazineContentsSeq") Long magazineContentsSeq, @Param("page") Integer page, @Param("contentsType") String contentsType, @Param("contentsUrl") String contentsUrl, @Param("description") String description, @Param("uploadStatus") Integer uploadStatus);
 }

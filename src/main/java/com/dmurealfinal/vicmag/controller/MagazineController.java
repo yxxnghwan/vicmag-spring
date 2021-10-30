@@ -317,4 +317,39 @@ public class MagazineController {
 
         return magazineService.search(searchDTO);
     }
+
+    /** 컨텐츠 텍스트 리스트 API*/
+    @GetMapping("/contentsText/{magazineContentsSeq}")
+    public List<ContentsTextDTO> getContentsText(HttpServletRequest request, HttpServletResponse response, @PathVariable Long magazineContentsSeq) {
+        logger.info("[getContentsText] 요청");
+        return magazineService.findContentsText(magazineContentsSeq);
+    }
+
+    /** 컨텐츠 텍스트 추가 API */
+    @PostMapping("/contentsText")
+    public void postContentsText(HttpServletRequest request, HttpServletResponse response, @RequestBody ContentsTextDTO contentsTextDTO) throws JsonProcessingException, IOException {
+        logger.info("[postContentsText] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
+            return;
+        }
+
+        MagazineContentsDTO magazineContentsDTO = magazineService.findMagazineContents(contentsTextDTO.getMagazineContents().getMagazineContentsSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(magazineContentsDTO.getMagazine().getBoard().getCompany().getAccountId())) {
+                logger.info("등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.sendError(HttpStatus.FORBIDDEN.value(), "등록하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                return;
+            }
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("contentsTextDTO : " + objectMapper.writeValueAsString(contentsTextDTO));
+
+        magazineService.saveContentsText(contentsTextDTO);
+    }
 }
