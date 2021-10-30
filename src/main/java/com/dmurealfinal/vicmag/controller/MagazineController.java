@@ -352,4 +352,68 @@ public class MagazineController {
 
         magazineService.saveContentsText(contentsTextDTO);
     }
+
+    /** 컨텐츠 텍스트 수정 */
+    @PutMapping("/contentsText")
+    public void updateContentsText(HttpServletRequest request, HttpServletResponse response, @RequestBody ContentsTextDTO contentsTextDTO) throws JsonProcessingException, IOException {
+        logger.info("[updateContentsText] 요청");
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
+            return;
+        }
+
+        ContentsTextDTO oldObject = magazineService.findContentsTextById(contentsTextDTO.getContentsTextSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(oldObject
+                    .getMagazineContents()
+                    .getMagazine()
+                    .getBoard()
+                    .getCompany()
+                    .getAccountId())) {
+                logger.info("수정하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.sendError(HttpStatus.FORBIDDEN.value(), "수정하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                return;
+            }
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("contentsTextDTO : " + objectMapper.writeValueAsString(contentsTextDTO));
+
+        magazineService.updateContentsText(contentsTextDTO);
+    }
+
+    /** 컨텐츠 텍스트 삭제 */
+    @DeleteMapping("/contentsText")
+    public void deleteContentsText(HttpServletRequest request, HttpServletResponse response, @RequestBody ContentsTextDTO contentsTextDTO) throws JsonProcessingException, IOException {
+        logger.info("[deleteContentsText] 요청");
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            logger.info("로그인 계정이 없습니다.");
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인 계정이 없습니다.");
+            return;
+        }
+
+        ContentsTextDTO oldObject = magazineService.findContentsTextById(contentsTextDTO.getContentsTextSeq());
+        if(!loginAccount.getAccountType().equals("admin")) {
+            if(!loginAccount.getAccountId().equals(oldObject
+                    .getMagazineContents()
+                    .getMagazine()
+                    .getBoard()
+                    .getCompany()
+                    .getAccountId())) {
+                logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                response.sendError(HttpStatus.FORBIDDEN.value(), "삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");
+                return;
+            }
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        logger.info("contentsTextDTO : " + objectMapper.writeValueAsString(contentsTextDTO));
+
+        magazineService.deleteContentsText(contentsTextDTO.getContentsTextSeq());
+    }
 }

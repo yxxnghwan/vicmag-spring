@@ -182,9 +182,38 @@ public class MagazineService {
         return ContentsText.toDTOList(contentsTextRepository.findByMagazineContentsSeq(magazineContentsSeq));
     }
 
+    /** SEQ로 단건 조회 */
+    @Transactional
+    public ContentsTextDTO findContentsTextById(Long contentsTextSeq) {
+        ContentsText contentsText = contentsTextRepository.getById(contentsTextSeq);
+
+        if(contentsText == null) return null;
+
+        ContentsTextDTO result = contentsText.toDTO();
+        result.setMagazineContents(contentsText.getMagazineContents().toDTO());
+        result.getMagazineContents().setMagazine(contentsText.getMagazineContents().getMagazine().toDTO());
+        result.getMagazineContents().getMagazine().setBoard(contentsText.getMagazineContents().getMagazine().getBoard().toDTO());
+        result.getMagazineContents().getMagazine().getBoard().setCompany(contentsText.getMagazineContents().getMagazine().getBoard().getCompany().toDTO());
+
+        return result;
+    }
+
     /** 컨텐츠 텍스트 등록 */
+    @Transactional
     public void saveContentsText(ContentsTextDTO contentsTextDTO) {
         ContentsText contentsText = contentsTextDTO.toEntity();
         contentsTextRepository.save(contentsText);
+    }
+
+    /** 컨텐츠 텍스트 수정 */
+    @Transactional
+    public void updateContentsText(ContentsTextDTO contentsTextDTO) {
+        contentsTextRepository.updateContentsText(contentsTextDTO.getContentsTextSeq(), contentsTextDTO.getStartTime(), contentsTextDTO.getEndTime(), contentsTextDTO.getText());
+    }
+
+    /** 컨텐츠 텍스트 삭제 */
+    @Transactional
+    public void deleteContentsText(Long contentsTextSeq) {
+        contentsTextRepository.deleteById(contentsTextSeq);
     }
 }
