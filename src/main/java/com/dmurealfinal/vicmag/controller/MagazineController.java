@@ -310,8 +310,23 @@ public class MagazineController {
 
     /** 검색 API */
     @GetMapping("/search")
-    public SearchResultDTO search(HttpServletRequest request, HttpServletResponse response, @RequestParam SearchDTO searchDTO) throws JsonProcessingException {
+    public SearchResultDTO search(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestParam String searchText,
+                                  @RequestParam String category,
+                                  @RequestParam Integer boardPage,
+                                  @RequestParam Integer magazinePage,
+                                  @RequestParam Integer boardSize,
+                                  @RequestParam Integer magazineSize) throws JsonProcessingException {
         logger.info("[search] 요청");
+
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setSearchText(searchText);
+        searchDTO.setCategory(category);
+        searchDTO.setBoardPage(boardPage);
+        searchDTO.setMagazinePage(magazinePage);
+        searchDTO.setBoardSize(boardSize);
+        searchDTO.setMagazineSize(magazineSize);
+
         ObjectMapper objectMapper = new ObjectMapper();
         logger.info("searchDTO : " + objectMapper.writeValueAsString(searchDTO));
 
