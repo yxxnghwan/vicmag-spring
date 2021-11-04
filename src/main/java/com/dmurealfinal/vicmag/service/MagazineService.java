@@ -176,6 +176,15 @@ public class MagazineService {
         return result;
     }
 
+    /** 페이지 카운트 */
+    @Transactional
+    public PageCountDTO pageCount(SearchDTO searchDTO) {
+        PageCountDTO result = new PageCountDTO();
+        result.setBoardPageCount(magazineBoardRepository.pageCount(searchDTO.getCategory(), searchDTO.getSearchText()));
+        result.setMagazinePageCount(magazineRepository.pageCount(searchDTO.getCategory(), searchDTO.getSearchText()));
+        return result;
+    }
+
     /** 컨텐츠 텍스트 조회 */
     @Transactional
     public List<ContentsTextDTO> findContentsText(Long magazineContentsSeq) {

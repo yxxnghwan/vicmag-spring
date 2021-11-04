@@ -333,6 +333,24 @@ public class MagazineController {
         return magazineService.search(searchDTO);
     }
 
+    /** 페이지 카운트 */
+    @GetMapping("/search/pageCount")
+    public PageCountDTO pageCount(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestParam String searchText,
+                                  @RequestParam String category,
+                                  @RequestParam Integer boardSize,
+                                  @RequestParam Integer magazineSize) throws JsonProcessingException {
+        logger.info("[pageCount] 요청");
+
+        SearchDTO searchDTO = new SearchDTO();
+        searchDTO.setSearchText(searchText);
+        searchDTO.setCategory(category);
+        searchDTO.setBoardSize(boardSize);
+        searchDTO.setMagazineSize(magazineSize);
+
+        return magazineService.pageCount(searchDTO);
+    }
+
     /** 컨텐츠 텍스트 리스트 API*/
     @GetMapping("/contentsText/{magazineContentsSeq}")
     public List<ContentsTextDTO> getContentsText(HttpServletRequest request, HttpServletResponse response, @PathVariable Long magazineContentsSeq) {

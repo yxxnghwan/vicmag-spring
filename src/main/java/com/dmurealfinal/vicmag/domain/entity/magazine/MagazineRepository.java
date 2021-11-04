@@ -33,4 +33,11 @@ public interface MagazineRepository extends JpaRepository<Magazine, Long> {
             "ORDER BY m.magazineSeq DESC")
     List<Magazine> search(@Param("searchText") String searchText, @Param("category") String category , Pageable pageable);
 
+    @Query("SELECT COUNT(m) FROM Magazine AS m , MagazineBoard AS mb " +
+            "WHERE m.board = mb " +
+            "AND mb.category LIKE %:category% " +
+            "AND (m.name LIKE %:searchText% " +
+            "OR m.tag LIKE %:searchText%) " +
+            "ORDER BY m.magazineSeq DESC")
+    Integer  pageCount(@Param("category") String category, @Param("searchText") String searchText);
 }
