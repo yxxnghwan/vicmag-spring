@@ -28,6 +28,12 @@ public class Purchase extends BaseTimeEntity {
     @Column(length = 30)
     private String companyId;
 
+    @Column(length = 50)
+    private String merchantUid;
+
+    @Column(length = 50)
+    private String impUid;
+
     @OneToOne(mappedBy = "purchase", cascade = CascadeType.REMOVE)
     private SinglePurchase singlePurchase;
 
@@ -40,11 +46,13 @@ public class Purchase extends BaseTimeEntity {
     public Purchase() {}
 
     @Builder
-    public Purchase(Long purchaseSeq, String purchaseType, String userId, String companyId, SinglePurchase singlePurchase, Subscribe subscribe, Payment payment, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+    public Purchase(Long purchaseSeq, String purchaseType, String userId, String companyId, String merchantUid,String impUid, SinglePurchase singlePurchase, Subscribe subscribe, Payment payment, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.purchaseSeq = purchaseSeq;
         this.purchaseType = purchaseType;
         this.userId = userId;
         this.companyId = companyId;
+        this.merchantUid = merchantUid;
+        this.impUid = impUid;
         this.singlePurchase = singlePurchase;
         this.subscribe = subscribe;
         this.payment = payment;
@@ -57,6 +65,8 @@ public class Purchase extends BaseTimeEntity {
                 .purchaseType(this.purchaseType)
                 .userId(this.userId)
                 .companyId(this.companyId)
+                .merchantUid(this.merchantUid)
+                .impUid(this.impUid)
                 .createdDateTime(this.createdDateTime)
                 .modifiedDateTime(this.modifiedDateTime)
                 .build();

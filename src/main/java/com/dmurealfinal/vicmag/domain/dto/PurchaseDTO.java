@@ -21,6 +21,10 @@ public class PurchaseDTO {
 
     private String companyId;
 
+    private String merchantUid;
+
+    private String impUid;
+
     private SubscribeDTO subscribe;
 
     private SinglePurchaseDTO singlePurchase;
@@ -47,11 +51,13 @@ public class PurchaseDTO {
     public PurchaseDTO() {}
 
     @Builder
-    public PurchaseDTO(Long purchaseSeq, String purchaseType, String userId, String companyId, UserDTO user, CompanyDTO company, SinglePurchaseDTO singlePurchase, SubscribeDTO subscribe, PaymentDTO payment, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+    public PurchaseDTO(Long purchaseSeq, String purchaseType, String userId, String companyId, String merchantUid, String impUid, UserDTO user, CompanyDTO company, SinglePurchaseDTO singlePurchase, SubscribeDTO subscribe, PaymentDTO payment, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.purchaseSeq = purchaseSeq;
         this.purchaseType = purchaseType;
         this.userId = userId;
         this.companyId = companyId;
+        this.merchantUid = merchantUid;
+        this.impUid = impUid;
         this.user = user;
         this.company = company;
         this.singlePurchase = singlePurchase;
@@ -67,6 +73,8 @@ public class PurchaseDTO {
                 .purchaseType(this.purchaseType)
                 .userId(this.userId)
                 .companyId(this.companyId)
+                .merchantUid(this.merchantUid)
+                .impUid(this.impUid)
                 .build();
     }
 }
