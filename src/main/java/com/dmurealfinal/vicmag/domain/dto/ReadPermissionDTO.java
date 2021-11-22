@@ -6,7 +6,14 @@ import java.util.List;
 
 @Data
 public class ReadPermissionDTO {
-    private List<SinglePurchaseDTO> purchasedMagazines;
+    private List<Long> purchasedMagazineSeqs;
 
     private Boolean isSubscribed;
+
+    public ReadPermissionDTO() {}
+
+    public ReadPermissionDTO(List<Long> purchasedMagazineSeqs, Boolean isSubscribed) {
+        this.purchasedMagazineSeqs = purchasedMagazineSeqs;
+        this.isSubscribed = isSubscribed;
+    }
 }

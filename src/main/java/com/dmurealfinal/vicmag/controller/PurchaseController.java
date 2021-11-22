@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.controller;
 
+import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
 import com.dmurealfinal.vicmag.domain.dto.ReadPermissionDTO;
 import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
 import com.dmurealfinal.vicmag.domain.dto.SubscribeDTO;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -75,9 +77,16 @@ public class PurchaseController {
     }
 
     /** 읽기권한 API */
-//    @GetMapping("/permission/{boardSeq}")
-//    public ReadPermissionDTO getReadPermission(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer boardSeq) {
-//        logger.info("[getReadPermission] 요청");
-//        purchaseService.getReadPermission(boardSeq);
-//    }
+    @GetMapping("/permission/{boardSeq}")
+    public ReadPermissionDTO getReadPermission(HttpServletRequest request, HttpServletResponse response, @PathVariable Long boardSeq) {
+        logger.info("[getReadPermission] 요청");
+
+        AccountDTO loginAccount = (AccountDTO)request.getAttribute("loginAccount");
+
+        if(loginAccount == null) {
+            return new ReadPermissionDTO(new ArrayList<Long>(), false);
+        }
+
+        return purchaseService.getReadPermission(loginAccount.getAccountId(), boardSeq);
+    }
 }

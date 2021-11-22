@@ -1,6 +1,7 @@
 package com.dmurealfinal.vicmag.service;
 
 import com.dmurealfinal.vicmag.domain.dto.PaymentDTO;
+import com.dmurealfinal.vicmag.domain.dto.ReadPermissionDTO;
 import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
 import com.dmurealfinal.vicmag.domain.dto.SubscribeDTO;
 import com.dmurealfinal.vicmag.domain.entity.purchase.*;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.stream.Collectors;
 
 @Service
 public class PurchaseService {
@@ -95,5 +98,16 @@ public class PurchaseService {
     public void deleteSubscribe(Long purchaseSeq) {
         subscribeRepository.deleteById(purchaseSeq);
         purchaseRepository.deleteById(purchaseSeq);
+    }
+
+    /** 읽기 권한 */
+    @Transactional
+    public ReadPermissionDTO getReadPermission(String userId, Long boardSeq) {
+        ReadPermissionDTO result = new ReadPermissionDTO();
+        result.setPurchasedMagazineSeqs(SinglePurchase.toDTOList(singlePurchaseRepository.findByUserAndBoard(userId, boardSeq)).stream().map(item->{return item.getMagazineSeq();}).collect(Collectors.toList()));
+
+        result.setIsSubscribed(subscribeRepository.findUserAndBoard(userId, boardSeq, LocalDateTime.now()) > 0);
+
+        return result;
     }
 }
