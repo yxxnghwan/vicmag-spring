@@ -285,7 +285,10 @@ public class MagazineController {
             return;
         }
 
-        MagazineDTO magazineDTO = magazineService.findMagazine(magazineContentsDTO.getMagazine().getMagazineSeq());
+        magazineContentsDTO = magazineService.findMagazineContents(magazineContentsDTO.getMagazineContentsSeq());
+        MagazineDTO magazineDTO = magazineService.findMagazine(magazineContentsDTO
+                .getMagazine()
+                .getMagazineSeq());
         if(!loginAccount.getAccountType().equals("admin")) {
             if(!loginAccount.getAccountId().equals(magazineDTO.getBoard().getCompany().getAccountId())) {
                 logger.info("삭제하려는 잡지사계정으로 로그인되어있지 않습니다.");

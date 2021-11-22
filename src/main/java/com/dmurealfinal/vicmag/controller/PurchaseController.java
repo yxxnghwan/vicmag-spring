@@ -1,5 +1,6 @@
 package com.dmurealfinal.vicmag.controller;
 
+import com.dmurealfinal.vicmag.domain.dto.ReadPermissionDTO;
 import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
 import com.dmurealfinal.vicmag.domain.dto.SubscribeDTO;
 import com.dmurealfinal.vicmag.service.PurchaseService;
@@ -72,4 +73,11 @@ public class PurchaseController {
         logger.info("[deleteSubscribe] 요청");
         purchaseService.deleteSubscribe(subscribeDTO.getPurchaseSeq());
     }
+
+    /** 읽기권한 API */
+//    @GetMapping("/permission/{boardSeq}")
+//    public ReadPermissionDTO getReadPermission(HttpServletRequest request, HttpServletResponse response, @PathVariable Integer boardSeq) {
+//        logger.info("[getReadPermission] 요청");
+//        purchaseService.getReadPermission(boardSeq);
+//    }
 }

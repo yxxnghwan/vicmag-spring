@@ -27,7 +27,7 @@ public class ContentsText {
     @Column(length = 1000)
     private String text;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "magazineContentsSeq")
     private MagazineContents magazineContents;
 
