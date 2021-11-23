@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,7 +38,7 @@ public class NoticeService {
     /** 공지사항 수정 */
     @Transactional
     public void updateNotice(NoticeDTO noticeDTO) {
-        noticeRepository.updateNotice(noticeDTO.getNoticeSeq(), noticeDTO.getTitle(), noticeDTO.getContents(), noticeDTO.getAccountId());
+        noticeRepository.updateNotice(noticeDTO.getNoticeSeq(), noticeDTO.getTitle(), noticeDTO.getContents(), noticeDTO.getAccountId(), LocalDateTime.now());
     }
 
     /** 공지사항 삭제 */

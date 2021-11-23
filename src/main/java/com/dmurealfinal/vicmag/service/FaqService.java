@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -40,7 +41,7 @@ public class FaqService {
     /** FAQ 수정 */
     @Transactional
     public void updateFaq(FaqDTO faqDTO) {
-        faqRepository.updateFaq(faqDTO.getFaqSeq(), faqDTO.getTitle(), faqDTO.getQuestion(), faqDTO.getAnswer(), faqDTO.getAccountId());
+        faqRepository.updateFaq(faqDTO.getFaqSeq(), faqDTO.getTitle(), faqDTO.getQuestion(), faqDTO.getAnswer(), faqDTO.getAccountId(), LocalDateTime.now());
     }
 
     /** FAQ 삭제 */
