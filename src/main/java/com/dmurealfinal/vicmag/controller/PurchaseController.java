@@ -1,9 +1,6 @@
 package com.dmurealfinal.vicmag.controller;
 
-import com.dmurealfinal.vicmag.domain.dto.AccountDTO;
-import com.dmurealfinal.vicmag.domain.dto.ReadPermissionDTO;
-import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
-import com.dmurealfinal.vicmag.domain.dto.SubscribeDTO;
+import com.dmurealfinal.vicmag.domain.dto.*;
 import com.dmurealfinal.vicmag.service.PurchaseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -88,5 +85,13 @@ public class PurchaseController {
         }
 
         return purchaseService.getReadPermission(loginAccount.getAccountId(), boardSeq);
+    }
+
+    /** 내 구매 내역 */
+    @GetMapping("/my/{userId}")
+    public MyPurchasedDTO getMyPurchaseList(HttpServletRequest request, HttpServletResponse response, @PathVariable String userId) {
+        logger.info("[getMyPurchaseList] 요청");
+
+        return purchaseService.getMyPurchaseList(userId);
     }
 }

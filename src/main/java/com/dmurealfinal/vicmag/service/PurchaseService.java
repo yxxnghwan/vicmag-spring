@@ -1,9 +1,8 @@
 package com.dmurealfinal.vicmag.service;
 
-import com.dmurealfinal.vicmag.domain.dto.PaymentDTO;
-import com.dmurealfinal.vicmag.domain.dto.ReadPermissionDTO;
-import com.dmurealfinal.vicmag.domain.dto.SinglePurchaseDTO;
-import com.dmurealfinal.vicmag.domain.dto.SubscribeDTO;
+import com.dmurealfinal.vicmag.domain.dto.*;
+import com.dmurealfinal.vicmag.domain.entity.magazine.Magazine;
+import com.dmurealfinal.vicmag.domain.entity.magazineboard.MagazineBoard;
 import com.dmurealfinal.vicmag.domain.entity.purchase.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -107,6 +106,18 @@ public class PurchaseService {
         result.setPurchasedMagazineSeqs(SinglePurchase.toDTOList(singlePurchaseRepository.findByUserAndBoard(userId, boardSeq)).stream().map(item->{return item.getMagazineSeq();}).collect(Collectors.toList()));
 
         result.setIsSubscribed(subscribeRepository.findUserAndBoard(userId, boardSeq, LocalDateTime.now()) > 0);
+
+        return result;
+    }
+
+    /** 내 구매 내역 */
+    @Transactional
+    public MyPurchasedDTO getMyPurchaseList(String userId) {
+        MyPurchasedDTO result = new MyPurchasedDTO();
+
+        result.setMagazines(Magazine.toDTOList(purchaseRepository.getMyPurchaseMagazines(userId)));
+
+        result.setMagazineBoards(MagazineBoard.toDTOList(purchaseRepository.getMyPurchaseBoards(userId)));
 
         return result;
     }
