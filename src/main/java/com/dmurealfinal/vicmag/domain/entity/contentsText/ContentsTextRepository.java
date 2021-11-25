@@ -18,4 +18,9 @@ public interface ContentsTextRepository extends JpaRepository<ContentsText, Long
             "ct.text = :text " +
             "WHERE ct.contentsTextSeq = :contentsTextSeq")
     int updateContentsText(@Param("contentsTextSeq") Long contentsTextSeq, @Param("startTime") Integer startTime, @Param("endTime") Integer endTime, @Param("text") String text);
+
+    @Modifying
+    @Query("DELETE FROM ContentsText c "
+        + "WHERE c.magazineContents.magazineContentsSeq = :magazineContentsSeq ")
+    int deleteByContentsId(@Param("magazineContentsSeq") Long magazineContentsSeq);
 }

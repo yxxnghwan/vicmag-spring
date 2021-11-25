@@ -148,6 +148,7 @@ public class MagazineService {
     /** 컨텐츠 삭제 */
     @Transactional
     public void deleteMagazineContents(Long magazineContentsSeq) {
+        contentsTextRepository.deleteByContentsId(magazineContentsSeq);
         magazineContentsRepository.deleteById(magazineContentsSeq);
     }
 

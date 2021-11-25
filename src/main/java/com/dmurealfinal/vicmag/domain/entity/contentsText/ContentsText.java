@@ -24,10 +24,10 @@ public class ContentsText {
     @Column
     private Integer endTime;
 
-    @Column(length = 1000)
+    @Column(length = 5000)
     private String text;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "magazineContentsSeq")
     private MagazineContents magazineContents;
 
